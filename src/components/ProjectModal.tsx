@@ -23,16 +23,16 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, theme, onCl
       <div className="relative w-full max-w-4xl bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-lg shadow-2xl overflow-hidden my-8 max-h-[90vh] flex flex-col">
         {/* Modal Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/90">
-          <div className="flex items-center gap-3">
-            <span className={`font-mono text-sm font-bold ${textPrimary}`}>
+          <div className="flex items-center gap-3 overflow-hidden">
+            <span className={`font-mono text-sm font-bold shrink-0 ${textPrimary}`}>
               {project.number} // {project.categoryTag}
             </span>
-            <span className="h-4 w-[1px] bg-neutral-300 dark:bg-neutral-700"></span>
-            <span className="font-mono text-xs text-neutral-500 uppercase">
-              {project.status}
-            </span>
+            <span className="h-4 w-[1px] bg-neutral-300 dark:bg-neutral-700 shrink-0"></span>
+            <h3 className="font-bold text-sm text-neutral-900 dark:text-white truncate">
+              {project.title}
+            </h3>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 shrink-0">
             <button
               onClick={onClose}
               className="p-1 rounded text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-200 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
@@ -45,40 +45,15 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, theme, onCl
 
         {/* Modal Scrollable Body */}
         <div className="p-6 overflow-y-auto space-y-6">
-          {/* Title & Headline */}
-          <div>
-            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">
-              {project.title}
-            </h2>
-            <p className="text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed">
-              {project.description}
-            </p>
-            {project.demoCredentials && (
-              <div className="mt-3 p-3 bg-amber-50 dark:bg-amber-950/70 border border-amber-300 dark:border-amber-700/80 rounded font-mono text-xs text-amber-900 dark:text-amber-200 flex items-center justify-between">
-                <span className="font-bold flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-[18px]">key</span>
-                  <span>Live App Demo Credentials:</span>
-                </span>
-                <span>ID: <strong className="text-amber-950 dark:text-amber-100 font-bold">{project.demoCredentials.id}</strong> | Password: <strong className="text-amber-950 dark:text-amber-100 font-bold">{project.demoCredentials.pass}</strong></span>
-              </div>
-            )}
-          </div>
-
-          {/* Quick Metrics Bar */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 bg-neutral-100/70 dark:bg-neutral-800/60 rounded border border-neutral-200 dark:border-neutral-700">
-            <div>
-              <p className="font-mono text-[10px] text-neutral-500 uppercase">Problem Solved</p>
-              <p className="text-xs font-medium text-neutral-800 dark:text-neutral-200 mt-0.5">{project.problem}</p>
+          {project.demoCredentials && (
+            <div className="p-3 bg-amber-50 dark:bg-amber-950/70 border border-amber-300 dark:border-amber-700/80 rounded font-mono text-xs text-amber-900 dark:text-amber-200 flex items-center justify-between">
+              <span className="font-bold flex items-center gap-1.5">
+                <span className="material-symbols-outlined text-[18px]">key</span>
+                <span>Live App Demo Credentials:</span>
+              </span>
+              <span>ID: <strong className="text-amber-950 dark:text-amber-100 font-bold">{project.demoCredentials.id}</strong> | Password: <strong className="text-amber-950 dark:text-amber-100 font-bold">{project.demoCredentials.pass}</strong></span>
             </div>
-            <div>
-              <p className="font-mono text-[10px] text-neutral-500 uppercase">Architecture Implemented</p>
-              <p className="text-xs font-medium text-neutral-800 dark:text-neutral-200 mt-0.5">{project.architecture}</p>
-            </div>
-            <div>
-              <p className="font-mono text-[10px] text-neutral-500 uppercase">Measured Impact</p>
-              <p className={`font-mono text-sm font-bold mt-0.5 ${textPrimary}`}>{project.metric}</p>
-            </div>
-          </div>
+          )}
 
           {/* Tab Navigation */}
           <div className="flex flex-wrap items-center gap-4 border-b border-neutral-200 dark:border-neutral-800 font-mono text-xs">
