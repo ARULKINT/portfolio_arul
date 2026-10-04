@@ -9,12 +9,11 @@ interface FoundationsSectionProps {
 export const FoundationsSection: React.FC<FoundationsSectionProps> = ({ theme, onFilterToCategory }) => {
   const [activeCard, setActiveCard] = useState<number | null>(null);
 
-  const isRust = theme === 'rust';
-  const isObsidian = theme === 'obsidian';
+  const isLight = theme === 'light';
 
-  const textPrimary = isRust ? 'text-[#d9480f]' : isObsidian ? 'text-sky-400' : 'text-[#0040da]';
-  const hoverBorder = isRust ? 'hover:border-[#d9480f]' : isObsidian ? 'hover:border-sky-500' : 'hover:border-[#0040da]';
-  const activeBg = isRust ? 'bg-[#ffdad2]/20' : isObsidian ? 'bg-sky-950/30' : 'bg-[#dde1ff]/30';
+  const textPrimary = isLight ? 'text-[#0040da]' : 'text-sky-400';
+  const hoverBorder = isLight ? 'hover:border-[#0040da]' : 'hover:border-sky-500';
+  const activeBg = isLight ? 'bg-[#dde1ff]/30' : 'bg-sky-950/30';
 
   const capabilities = [
     {
@@ -98,7 +97,7 @@ export const FoundationsSection: React.FC<FoundationsSectionProps> = ({ theme, o
                 key={cap.index}
                 onClick={() => setActiveCard(isSelected ? null : index)}
                 className={`bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 p-6 rounded transition-all duration-200 flex flex-col justify-between cursor-pointer ${hoverBorder} ${
-                  isSelected ? `ring-2 ring-offset-1 ${isRust ? 'ring-[#d9480f]' : 'ring-[#0040da]'} ${activeBg}` : 'shadow-2xs'
+                  isSelected ? `ring-2 ring-offset-1 ${isLight ? 'ring-indigo-600' : 'ring-sky-500'} ${activeBg}` : 'shadow-2xs'
                 }`}
               >
                 <div>

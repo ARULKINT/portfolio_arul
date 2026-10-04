@@ -9,11 +9,10 @@ interface CapabilitiesSectionProps {
 export const CapabilitiesSection: React.FC<CapabilitiesSectionProps> = ({ theme }) => {
   const [selectedSkill, setSelectedSkill] = useState<SkillDetail | null>(null);
 
-  const isRust = theme === 'rust';
-  const isObsidian = theme === 'obsidian';
+  const isLight = theme === 'light';
 
-  const textPrimary = isRust ? 'text-[#d9480f]' : isObsidian ? 'text-sky-400' : 'text-[#0040da]';
-  const hoverSkillBorder = isRust ? 'hover:border-[#d9480f] hover:text-[#d9480f]' : isObsidian ? 'hover:border-sky-400 hover:text-sky-300' : 'hover:border-[#0040da] hover:text-[#0040da]';
+  const textPrimary = isLight ? 'text-indigo-600 font-bold' : 'text-sky-400';
+  const hoverSkillBorder = isLight ? 'hover:border-indigo-600 hover:text-indigo-600 font-bold' : 'hover:border-sky-400 hover:text-sky-300';
 
   const handleSkillClick = (skillName: string) => {
     if (SKILL_DETAILS[skillName]) {

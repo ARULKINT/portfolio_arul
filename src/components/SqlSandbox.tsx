@@ -34,9 +34,9 @@ ORDER BY scrap_rate_pct DESC;`;
     executionTimeMs: 4.8
   });
 
-  const isRust = theme === 'rust';
-  const textPrimary = isRust ? 'text-[#d9480f]' : 'text-[#0040da]';
-  const btnRun = isRust ? 'bg-[#d9480f] hover:bg-[#b42902]' : 'bg-[#0040da] hover:bg-[#0036bc]';
+  const isLight = theme === 'light';
+  const textPrimary = isLight ? 'text-indigo-600 font-bold' : 'text-sky-400';
+  const btnRun = isLight ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-sky-500 hover:bg-sky-400 text-neutral-950 font-bold';
 
   const presets = [
     {

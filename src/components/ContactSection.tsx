@@ -35,11 +35,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ theme }) => {
     return () => clearInterval(interval);
   }, []);
 
-  const isRust = theme === 'rust';
-  const textPrimary = isRust ? 'text-[#d9480f]' : 'text-[#315cf5]';
-  const btnSubmit = isRust
-    ? 'bg-[#d9480f] hover:bg-[#b42902] text-white'
-    : 'bg-[#0040da] hover:bg-[#0036bc] text-white';
+  const isLight = theme === 'light';
+  const textPrimary = isLight ? 'text-indigo-600 font-bold' : 'text-sky-400';
+  const btnSubmit = isLight
+    ? 'bg-indigo-600 hover:bg-indigo-700 text-white'
+    : 'bg-sky-500 hover:bg-sky-400 text-neutral-950 font-bold';
 
   const handleCopyEmail = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -83,7 +83,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ theme }) => {
             {/* Contact Narrative Left */}
             <div className="lg:col-span-6 space-y-6">
               <div className="flex items-center gap-2">
-                <span className={`w-2 h-2 rounded-full ${isRust ? 'bg-[#d9480f]' : 'bg-[#315cf5]'} animate-pulse`}></span>
+                <span className={`w-2 h-2 rounded-full ${isLight ? 'bg-indigo-600' : 'bg-sky-400'} animate-pulse`}></span>
                 <span className={`font-mono text-xs uppercase font-bold tracking-widest ${textPrimary}`}>
                   [SEC_08 // INQUIRIES &amp; DISPATCH]
                 </span>
@@ -178,7 +178,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ theme }) => {
             <div className="lg:col-span-6 bg-white/5 p-6 sm:p-8 rounded-lg border border-neutral-700/80">
               <div className="flex items-center justify-between pb-4 mb-4 border-b border-white/10 font-mono text-xs text-white/70">
                 <span className="flex items-center gap-1.5">
-                  <span className={`w-2 h-2 rounded-full ${isRust ? 'bg-[#d9480f]' : 'bg-[#315cf5]'}`}></span>
+                  <span className={`w-2 h-2 rounded-full ${isLight ? 'bg-indigo-600' : 'bg-sky-400'}`}></span>
                   <span>direct_transmission.sh</span>
                 </span>
                 <span className="text-emerald-400">TLS_ENCRYPTED</span>

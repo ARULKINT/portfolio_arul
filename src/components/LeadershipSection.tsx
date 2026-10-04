@@ -9,16 +9,13 @@ interface LeadershipSectionProps {
 export const LeadershipSection: React.FC<LeadershipSectionProps> = ({ theme }) => {
   const [selectedLeader, setSelectedLeader] = useState<LeadershipItem | null>(null);
 
-  const isRust = theme === 'rust';
-  const isObsidian = theme === 'obsidian';
+  const isLight = theme === 'light';
 
-  const textPrimary = isRust ? 'text-[#d9480f]' : isObsidian ? 'text-sky-400' : 'text-[#0040da]';
-  const hoverBorder = isRust ? 'hover:border-[#d9480f]' : isObsidian ? 'hover:border-sky-500' : 'hover:border-[#0040da]';
-  const iconBg = isRust
-    ? 'bg-[#ffdad2] text-[#d9480f] border-[#ffb4a2]'
-    : isObsidian
-    ? 'bg-sky-950 text-sky-400 border-sky-800'
-    : 'bg-[#dde1ff] text-[#0040da] border-[#b8c4ff]';
+  const textPrimary = isLight ? 'text-indigo-600 font-bold' : 'text-sky-400';
+  const hoverBorder = isLight ? 'hover:border-indigo-600' : 'hover:border-sky-500';
+  const iconBg = isLight
+    ? 'bg-indigo-50 text-indigo-700 border-indigo-200'
+    : 'bg-sky-950 text-sky-400 border-sky-800';
 
   return (
     <section className="w-full py-12 lg:py-16 border-b transition-colors" id="leadership">

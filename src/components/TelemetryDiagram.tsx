@@ -34,10 +34,10 @@ export const TelemetryDiagram: React.FC<TelemetryDiagramProps> = ({ theme, onSel
     }
   };
 
-  const isRust = theme === 'rust';
-  const primaryStroke = isRust ? '#D9480F' : '#315CF5';
-  const glowStop1 = isRust ? '#D9480F' : '#315CF5';
-  const glowStop2 = isRust ? '#FE5E36' : '#b8c4ff';
+  const isLight = theme === 'light';
+  const primaryStroke = isLight ? '#4F46E5' : '#38BDF8';
+  const glowStop1 = isLight ? '#4F46E5' : '#38BDF8';
+  const glowStop2 = isLight ? '#818CF8' : '#60A5FA';
 
   return (
     <div className="relative bg-[#16171a] rounded border border-neutral-700/80 shadow-2xl text-[#f4f2ec] font-mono text-xs overflow-hidden">
@@ -70,8 +70,8 @@ export const TelemetryDiagram: React.FC<TelemetryDiagramProps> = ({ theme, onSel
           <span
             className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
               isStreaming
-                ? isRust
-                  ? 'text-[#ffdad2] bg-[#d9480f]/20 border-[#d9480f]/40'
+                ? isLight
+                  ? 'text-indigo-700 bg-indigo-50 border-indigo-300'
                   : 'text-[#dde1ff] bg-[#315cf5]/20 border-[#315cf5]/40'
                 : 'text-neutral-400 bg-neutral-800 border-neutral-700'
             }`}
@@ -129,16 +129,16 @@ export const TelemetryDiagram: React.FC<TelemetryDiagramProps> = ({ theme, onSel
           {/* Storage -> Analytics & Serving Endpoints */}
           <path
             d="M 450 190 C 470 190, 470 100, 480 100"
-            stroke={isRust ? "#ffdad2" : "#b8c4ff"}
+            stroke={isLight ? '#818CF8' : '#b8c4ff'}
             strokeWidth="1.8"
-            strokeDasharray={isStreaming ? "3 3" : "none"}
+            strokeDasharray={isStreaming ? '3 3' : 'none'}
             className="opacity-80"
           />
           <path
             d="M 450 190 C 470 190, 470 280, 480 280"
-            stroke={isRust ? "#ffdad2" : "#b8c4ff"}
+            stroke={isLight ? '#818CF8' : '#b8c4ff'}
             strokeWidth="1.8"
-            strokeDasharray={isStreaming ? "3 3" : "none"}
+            strokeDasharray={isStreaming ? '3 3' : 'none'}
             className="opacity-80"
           />
 
@@ -154,7 +154,7 @@ export const TelemetryDiagram: React.FC<TelemetryDiagramProps> = ({ theme, onSel
                 <animate attributeName="opacity" dur="1.8s" repeatCount="indefinite" values="0.3;1;0.3" />
               </circle>
               {/* Particle 3: Core to Storage */}
-              <circle cx="340" cy="190" r="4" fill={isRust ? "#fe5e36" : "#60a5fa"}>
+              <circle cx="340" cy="190" r="4" fill={isLight ? '#4F46E5' : '#60a5fa'}>
                 <animate attributeName="cx" dur="1.2s" repeatCount="indefinite" values="310;370" />
               </circle>
               {/* Particle 4: Storage to Analytics */}
@@ -224,7 +224,7 @@ export const TelemetryDiagram: React.FC<TelemetryDiagramProps> = ({ theme, onSel
               stroke={primaryStroke}
               strokeWidth={selectedNodeId === 'engine_core' ? 2.5 : 1.5}
             />
-            <text x="50" y="26" textAnchor="middle" fill={isRust ? "#ffb4a2" : "#93c5fd"} fontSize="9" fontWeight="700">
+            <text x="50" y="26" textAnchor="middle" fill={isLight ? '#818CF8' : '#93c5fd'} fontSize="9" fontWeight="700">
               ENGINE_CORE
             </text>
             <text x="50" y="46" textAnchor="middle" fill="#ffffff" fontSize="11" fontWeight="700">
@@ -256,7 +256,7 @@ export const TelemetryDiagram: React.FC<TelemetryDiagramProps> = ({ theme, onSel
             <text x="40" y="45" textAnchor="middle" fill="#ffffff" fontSize="10" fontWeight="600">
               PostgreSQL
             </text>
-            <text x="40" y="60" textAnchor="middle" fill={isRust ? "#ffdad2" : "#60a5fa"} fontSize="8">
+            <text x="40" y="60" textAnchor="middle" fill={isLight ? '#a5b4fc' : '#60a5fa'} fontSize="8">
               Star Schema
             </text>
           </g>
@@ -275,7 +275,7 @@ export const TelemetryDiagram: React.FC<TelemetryDiagramProps> = ({ theme, onSel
               stroke={selectedNodeId === 'analytics' ? primaryStroke : 'rgba(255,255,255,0.15)'}
               strokeWidth={selectedNodeId === 'analytics' ? 2 : 1}
             />
-            <text x="25" y="24" textAnchor="middle" fill={isRust ? "#ffdad2" : "#b8c4ff"} fontSize="8" fontWeight="600">
+            <text x="25" y="24" textAnchor="middle" fill={isLight ? '#a5b4fc' : '#b8c4ff'} fontSize="8" fontWeight="600">
               ANALYTICS
             </text>
             <text x="25" y="38" textAnchor="middle" fill="#ffffff" fontSize="8">
@@ -297,7 +297,7 @@ export const TelemetryDiagram: React.FC<TelemetryDiagramProps> = ({ theme, onSel
               stroke={selectedNodeId === 'serving' ? primaryStroke : 'rgba(255,255,255,0.15)'}
               strokeWidth={selectedNodeId === 'serving' ? 2 : 1}
             />
-            <text x="25" y="24" textAnchor="middle" fill={isRust ? "#ffdad2" : "#b8c4ff"} fontSize="8" fontWeight="600">
+            <text x="25" y="24" textAnchor="middle" fill={isLight ? '#a5b4fc' : '#b8c4ff'} fontSize="8" fontWeight="600">
               SERVING
             </text>
             <text x="25" y="38" textAnchor="middle" fill="#ffffff" fontSize="8">

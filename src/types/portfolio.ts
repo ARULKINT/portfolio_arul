@@ -1,4 +1,4 @@
-export type PortfolioTheme = 'cobalt' | 'rust' | 'obsidian';
+export type PortfolioTheme = 'obsidian' | 'light';
 
 export interface Project {
   id: string;

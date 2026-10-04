@@ -6,8 +6,8 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ theme }) => {
-  const isRust = theme === 'rust';
-  const textPrimary = isRust ? 'text-[#d9480f]' : 'text-[#0040da]';
+  const isLight = theme === 'light';
+  const textPrimary = isLight ? 'text-indigo-600 font-bold' : 'text-sky-400';
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });

@@ -13,12 +13,11 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ theme, initial
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
-  const isRust = theme === 'rust';
-  const isObsidian = theme === 'obsidian';
+  const isLight = theme === 'light';
 
-  const textPrimary = isRust ? 'text-[#d9480f]' : isObsidian ? 'text-sky-400' : 'text-[#0040da]';
-  const hoverBorder = isRust ? 'hover:border-[#d9480f]' : isObsidian ? 'hover:border-sky-500' : 'hover:border-[#0040da]';
-  const filterActiveBg = isRust ? 'bg-[#16171a] text-white' : isObsidian ? 'bg-sky-600 text-white' : 'bg-[#1c1b1b] text-white';
+  const textPrimary = isLight ? 'text-[#0040da]' : 'text-sky-400';
+  const hoverBorder = isLight ? 'hover:border-[#0040da]' : 'hover:border-sky-500';
+  const filterActiveBg = isLight ? 'bg-neutral-900 text-white' : 'bg-sky-600 text-white';
 
   const filterOptions = [
     { label: 'All (10)', value: 'all' },
@@ -122,9 +121,9 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ theme, initial
                   </span>
                   <span className="h-3 w-[1px] bg-neutral-300 dark:bg-neutral-700"></span>
                   <span className={`font-mono text-[11px] px-2 py-0.5 rounded uppercase font-semibold border ${
-                    isRust
-                      ? 'bg-[#ffdad2] text-[#8a1c00] border-[#ffb4a2]'
-                      : 'bg-[#dde1ff] text-[#001355] border-[#b8c4ff]'
+                    isLight
+                      ? 'bg-indigo-50 text-indigo-700 border-indigo-300'
+                      : 'bg-sky-950/80 text-sky-300 border-sky-700'
                   }`}>
                     Featured Pipeline
                   </span>
@@ -213,22 +212,22 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ theme, initial
                     <span className={textPrimary}>SPARK-SESSION [ACTIVE]</span>
                   </div>
                   <pre className="leading-5 text-neutral-200 font-mono text-[11px]">
-                    <span className={isRust ? "text-[#fe5e36]" : "text-sky-300"}>from</span> pyspark.sql <span className={isRust ? "text-[#fe5e36]" : "text-sky-300"}>import</span> SparkSession{'\n'}
-                    <span className={isRust ? "text-[#fe5e36]" : "text-sky-300"}>from</span> pyspark.sql.functions <span className={isRust ? "text-[#fe5e36]" : "text-sky-300"}>import</span> col, from_json{'\n\n'}
+                    <span className={isLight ? "text-indigo-300" : "text-sky-300"}>from</span> pyspark.sql <span className={isLight ? "text-indigo-300" : "text-sky-300"}>import</span> SparkSession{'\n'}
+                    <span className={isLight ? "text-indigo-300" : "text-sky-300"}>from</span> pyspark.sql.functions <span className={isLight ? "text-indigo-300" : "text-sky-300"}>import</span> col, from_json{'\n\n'}
                     spark = SparkSession.builder \{'\n'}
-                    &nbsp;&nbsp;&nbsp;&nbsp;.appName(<span className={isRust ? "text-[#cae9e0]" : "text-amber-300"}>"TelemetryIngestPipeline"</span>) \{'\n'}
+                    &nbsp;&nbsp;&nbsp;&nbsp;.appName(<span className={isLight ? "text-emerald-300" : "text-amber-300"}>"TelemetryIngestPipeline"</span>) \{'\n'}
                     &nbsp;&nbsp;&nbsp;&nbsp;.getOrCreate(){'\n\n'}
                     raw_df = spark.readStream \{'\n'}
-                    &nbsp;&nbsp;&nbsp;&nbsp;.format(<span className={isRust ? "text-[#cae9e0]" : "text-amber-300"}>"kafka"</span>) \{'\n'}
-                    &nbsp;&nbsp;&nbsp;&nbsp;.option(<span className={isRust ? "text-[#cae9e0]" : "text-amber-300"}>"subscribe"</span>, <span className={isRust ? "text-[#cae9e0]" : "text-amber-300"}>"sensors.telemetry.v1"</span>) \{'\n'}
+                    &nbsp;&nbsp;&nbsp;&nbsp;.format(<span className={isLight ? "text-emerald-300" : "text-amber-300"}>"kafka"</span>) \{'\n'}
+                    &nbsp;&nbsp;&nbsp;&nbsp;.option(<span className={isLight ? "text-emerald-300" : "text-amber-300"}>"subscribe"</span>, <span className={isLight ? "text-emerald-300" : "text-amber-300"}>"sensors.telemetry.v1"</span>) \{'\n'}
                     &nbsp;&nbsp;&nbsp;&nbsp;.load(){'\n\n'}
                     clean_df = raw_df \{'\n'}
-                    &nbsp;&nbsp;&nbsp;&nbsp;.select(from_json(col(<span className={isRust ? "text-[#cae9e0]" : "text-amber-300"}>"value"</span>).cast(<span className={isRust ? "text-[#cae9e0]" : "text-amber-300"}>"string"</span>), schema).alias(<span className={isRust ? "text-[#cae9e0]" : "text-amber-300"}>"payload"</span>)) \{'\n'}
-                    &nbsp;&nbsp;&nbsp;&nbsp;.filter(col(<span className={isRust ? "text-[#cae9e0]" : "text-amber-300"}>"payload.sensor_val"</span>).isNotNull()){'\n\n'}
+                    &nbsp;&nbsp;&nbsp;&nbsp;.select(from_json(col(<span className={isLight ? "text-emerald-300" : "text-amber-300"}>"value"</span>).cast(<span className={isLight ? "text-emerald-300" : "text-amber-300"}>"string"</span>), schema).alias(<span className={isLight ? "text-emerald-300" : "text-amber-300"}>"payload"</span>)) \{'\n'}
+                    &nbsp;&nbsp;&nbsp;&nbsp;.filter(col(<span className={isLight ? "text-emerald-300" : "text-amber-300"}>"payload.sensor_val"</span>).isNotNull()){'\n\n'}
                     clean_df.writeStream \{'\n'}
-                    &nbsp;&nbsp;&nbsp;&nbsp;.partitionBy(<span className={isRust ? "text-[#cae9e0]" : "text-amber-300"}>"batch_date"</span>, <span className={isRust ? "text-[#cae9e0]" : "text-amber-300"}>"node_id"</span>) \{'\n'}
-                    &nbsp;&nbsp;&nbsp;&nbsp;.format(<span className={isRust ? "text-[#cae9e0]" : "text-amber-300"}>"parquet"</span>) \{'\n'}
-                    &nbsp;&nbsp;&nbsp;&nbsp;.start(<span className={isRust ? "text-[#cae9e0]" : "text-amber-300"}>"/lake/partitioned_telemetry/"</span>)
+                    &nbsp;&nbsp;&nbsp;&nbsp;.partitionBy(<span className={isLight ? "text-emerald-300" : "text-amber-300"}>"batch_date"</span>, <span className={isLight ? "text-emerald-300" : "text-amber-300"}>"node_id"</span>) \{'\n'}
+                    &nbsp;&nbsp;&nbsp;&nbsp;.format(<span className={isLight ? "text-emerald-300" : "text-amber-300"}>"parquet"</span>) \{'\n'}
+                    &nbsp;&nbsp;&nbsp;&nbsp;.start(<span className={isLight ? "text-emerald-300" : "text-amber-300"}>"/lake/partitioned_telemetry/"</span>)
                   </pre>
                 </div>
               </div>

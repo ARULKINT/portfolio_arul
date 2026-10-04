@@ -9,12 +9,11 @@ interface ExperienceSectionProps {
 export const ExperienceSection: React.FC<ExperienceSectionProps> = ({ theme }) => {
   const [showShiftDetails, setShowShiftDetails] = useState<boolean>(false);
 
-  const isRust = theme === 'rust';
-  const isObsidian = theme === 'obsidian';
+  const isLight = theme === 'light';
 
-  const textPrimary = isRust ? 'text-[#d9480f]' : isObsidian ? 'text-sky-400' : 'text-[#0040da]';
-  const borderPrimary = isRust ? 'border-[#d9480f]' : isObsidian ? 'border-sky-500' : 'border-[#0040da]';
-  const bgTimelineDot = isRust ? 'bg-[#d9480f]' : isObsidian ? 'bg-sky-500' : 'bg-[#0040da]';
+  const textPrimary = isLight ? 'text-indigo-600 font-bold' : 'text-sky-400';
+  const borderPrimary = isLight ? 'border-indigo-600' : 'border-sky-500';
+  const bgTimelineDot = isLight ? 'bg-indigo-600' : 'bg-sky-500';
 
   return (
     <section className="w-full py-12 lg:py-16 border-b transition-colors" id="experience">

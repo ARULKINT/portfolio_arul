@@ -7,11 +7,10 @@ interface AcademicsSectionProps {
 }
 
 export const AcademicsSection: React.FC<AcademicsSectionProps> = ({ theme }) => {
-  const isRust = theme === 'rust';
-  const isObsidian = theme === 'obsidian';
+  const isLight = theme === 'light';
 
-  const textPrimary = isRust ? 'text-[#d9480f]' : isObsidian ? 'text-sky-400' : 'text-[#0040da]';
-  const hoverBorder = isRust ? 'hover:border-[#d9480f]' : isObsidian ? 'hover:border-sky-500' : 'hover:border-[#0040da]';
+  const textPrimary = isLight ? 'text-indigo-600 font-bold' : 'text-sky-400';
+  const hoverBorder = isLight ? 'hover:border-indigo-600' : 'hover:border-sky-500';
 
   return (
     <section className="w-full py-12 lg:py-16 border-b transition-colors bg-neutral-100/60 dark:bg-neutral-900/40" id="academics">
@@ -44,9 +43,9 @@ export const AcademicsSection: React.FC<AcademicsSectionProps> = ({ theme }) => 
                   <span
                     className={`px-2 py-0.5 rounded font-mono text-[11px] uppercase font-semibold border ${
                       entry.status === 'In Progress'
-                        ? isRust
-                          ? 'bg-[#ffdad2] text-[#8a1c00] border-[#ffb4a2]'
-                          : 'bg-[#dde1ff] text-[#001355] border-[#b8c4ff]'
+                        ? isLight
+                          ? 'bg-indigo-50 text-indigo-700 border-indigo-300'
+                          : 'bg-sky-950/80 text-sky-300 border-sky-700'
                         : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-neutral-300 dark:border-neutral-700'
                     }`}
                   >

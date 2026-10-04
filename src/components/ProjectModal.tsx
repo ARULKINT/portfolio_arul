@@ -12,9 +12,9 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, theme, onCl
   const [activeTab, setActiveTab] = useState<'interactive' | 'code' | 'architecture'>('interactive');
   const [apiStatus, setApiStatus] = useState<'idle' | 'loading' | 'success'>('idle');
 
-  const isRust = theme === 'rust';
-  const textPrimary = isRust ? 'text-[#d9480f]' : 'text-[#0040da]';
-  const activeTabClass = isRust ? 'border-[#d9480f] text-[#d9480f]' : 'border-[#0040da] text-[#0040da]';
+  const isLight = theme === 'light';
+  const textPrimary = isLight ? 'text-indigo-600 font-bold' : 'text-sky-400';
+  const activeTabClass = isLight ? 'border-indigo-600 text-indigo-600 font-bold' : 'border-sky-400 text-sky-400';
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-fadeIn overflow-y-auto">

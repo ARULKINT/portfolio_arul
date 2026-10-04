@@ -41,31 +41,22 @@ export const Header: React.FC<HeaderProps> = ({ currentTheme, onThemeChange, onO
   ];
 
   const getThemeClasses = () => {
-    if (currentTheme === 'rust') {
+    if (currentTheme === 'light') {
       return {
-        headerBg: scrolled ? 'bg-[#f4f2ec]/95 border-[#dfdcd3]' : 'bg-[#f4f2ec] border-[#dfdcd3]',
-        textPrimary: 'text-[#d9480f]',
-        activeBorder: 'border-[#d9480f] text-[#d9480f]',
-        btnPrimary: 'bg-[#1b1d21] text-[#f4f2ec] hover:bg-[#d9480f] hover:text-white border-[#2a2c32]',
-        pillBg: 'bg-white border-[#dfdcd3] text-[#3d3e42]',
+        headerBg: scrolled ? 'bg-white/95 border-neutral-300' : 'bg-white border-neutral-200',
+        textPrimary: 'text-[#0040da]',
+        activeBorder: 'border-[#0040da] text-[#0040da]',
+        btnPrimary: 'bg-neutral-900 text-white hover:bg-sky-600 border-transparent',
+        pillBg: 'bg-neutral-100 border-neutral-300 text-neutral-800',
       };
     }
-    if (currentTheme === 'obsidian') {
-      return {
-        headerBg: scrolled ? 'bg-[#121316]/95 border-[#2a2c32]' : 'bg-[#121316] border-[#2a2c32]',
-        textPrimary: 'text-[#315cf5]',
-        activeBorder: 'border-[#315cf5] text-[#315cf5]',
-        btnPrimary: 'bg-[#1f2229] text-white hover:bg-[#315cf5] border-[#373b47]',
-        pillBg: 'bg-[#181a20] border-[#2a2c32] text-[#9ca3af]',
-      };
-    }
-    // Default cobalt
+    // Default obsidian (dark mode)
     return {
-      headerBg: scrolled ? 'bg-[#fcf9f8]/95 border-[#c4c5d8]/60' : 'bg-[#fcf9f8] border-[#c4c5d8]/40',
-      textPrimary: 'text-[#0040da]',
-      activeBorder: 'border-[#0040da] text-[#0040da]',
-      btnPrimary: 'bg-[#313030] text-[#f3f0ef] hover:bg-[#315cf5] hover:text-white border-transparent',
-      pillBg: 'bg-white border-[#c4c5d8]/80 text-[#434655]',
+      headerBg: scrolled ? 'bg-[#121316]/95 border-[#2a2c32]' : 'bg-[#121316] border-[#2a2c32]',
+      textPrimary: 'text-sky-400',
+      activeBorder: 'border-sky-400 text-sky-400',
+      btnPrimary: 'bg-[#1f2229] text-white hover:bg-sky-600 border-[#373b47]',
+      pillBg: 'bg-[#181a20] border-[#2a2c32] text-[#9ca3af]',
     };
   };
 
@@ -88,8 +79,8 @@ export const Header: React.FC<HeaderProps> = ({ currentTheme, onThemeChange, onO
           {/* Availability Status Badge */}
           <div className={`hidden xl:flex items-center gap-2 px-2.5 py-1 rounded text-xs font-mono tracking-wider border shadow-2xs ${themeStyle.pillBg}`}>
             <span className="relative flex h-2 w-2">
-              <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${currentTheme === 'rust' ? 'bg-[#d9480f]' : 'bg-[#0040da]'}`}></span>
-              <span className={`relative inline-flex rounded-full h-2 w-2 ${currentTheme === 'rust' ? 'bg-[#d9480f]' : 'bg-[#0040da]'}`}></span>
+              <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${currentTheme === 'light' ? 'bg-indigo-600' : 'bg-emerald-400'}`}></span>
+              <span className={`relative inline-flex rounded-full h-2 w-2 ${currentTheme === 'light' ? 'bg-indigo-600' : 'bg-emerald-400'}`}></span>
             </span>
             <span className="uppercase text-[11px] font-medium">Available for Full-time Roles</span>
           </div>
@@ -117,40 +108,29 @@ export const Header: React.FC<HeaderProps> = ({ currentTheme, onThemeChange, onO
 
         {/* Zone 3: Actions & Theme Controls */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-          {/* Interactive Theme Switcher */}
+          {/* Interactive Theme Switcher (Dark vs Light) */}
           <div className="hidden sm:flex items-center p-0.5 rounded border border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 text-[11px] font-mono">
             <button
-              onClick={() => onThemeChange('cobalt')}
-              title="Switch to Cobalt theme (Editorial Blue)"
-              className={`px-2 py-0.5 rounded transition-all ${
-                currentTheme === 'cobalt'
-                  ? 'bg-white dark:bg-neutral-900 text-[#0040da] font-bold shadow-2xs'
-                  : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900'
-              }`}
-            >
-              Cobalt
-            </button>
-            <button
-              onClick={() => onThemeChange('rust')}
-              title="Switch to Tectonic Rust theme"
-              className={`px-2 py-0.5 rounded transition-all ${
-                currentTheme === 'rust'
-                  ? 'bg-white dark:bg-neutral-900 text-[#d9480f] font-bold shadow-2xs'
-                  : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900'
-              }`}
-            >
-              Rust
-            </button>
-            <button
               onClick={() => onThemeChange('obsidian')}
-              title="Switch to Obsidian Dark theme"
-              className={`px-2 py-0.5 rounded transition-all ${
+              title="Switch to Dark theme (Default)"
+              className={`px-2.5 py-0.5 rounded transition-all cursor-pointer ${
                 currentTheme === 'obsidian'
                   ? 'bg-neutral-900 text-sky-400 font-bold shadow-2xs'
                   : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900'
               }`}
             >
-              Dark
+              🌙 Dark
+            </button>
+            <button
+              onClick={() => onThemeChange('light')}
+              title="Switch to Light theme (High contrast)"
+              className={`px-2.5 py-0.5 rounded transition-all cursor-pointer ${
+                currentTheme === 'light'
+                  ? 'bg-white text-neutral-900 font-bold shadow-2xs'
+                  : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900'
+              }`}
+            >
+              ☀️ Light
             </button>
           </div>
 
@@ -184,22 +164,16 @@ export const Header: React.FC<HeaderProps> = ({ currentTheme, onThemeChange, onO
             <span>THEME SETTING</span>
             <div className="flex items-center gap-1">
               <button
-                onClick={() => onThemeChange('cobalt')}
-                className={`px-2 py-0.5 rounded text-xs ${currentTheme === 'cobalt' ? 'bg-[#0040da] text-white' : 'bg-neutral-100 dark:bg-neutral-800'}`}
-              >
-                Cobalt
-              </button>
-              <button
-                onClick={() => onThemeChange('rust')}
-                className={`px-2 py-0.5 rounded text-xs ${currentTheme === 'rust' ? 'bg-[#d9480f] text-white' : 'bg-neutral-100 dark:bg-neutral-800'}`}
-              >
-                Rust
-              </button>
-              <button
                 onClick={() => onThemeChange('obsidian')}
-                className={`px-2 py-0.5 rounded text-xs ${currentTheme === 'obsidian' ? 'bg-sky-600 text-white' : 'bg-neutral-100 dark:bg-neutral-800'}`}
+                className={`px-2.5 py-0.5 rounded text-xs cursor-pointer ${currentTheme === 'obsidian' ? 'bg-sky-600 text-white font-bold' : 'bg-neutral-100 dark:bg-neutral-800'}`}
               >
-                Dark
+                🌙 Dark
+              </button>
+              <button
+                onClick={() => onThemeChange('light')}
+                className={`px-2.5 py-0.5 rounded text-xs cursor-pointer ${currentTheme === 'light' ? 'bg-neutral-900 text-white font-bold' : 'bg-neutral-100 dark:bg-neutral-800'}`}
+              >
+                ☀️ Light
               </button>
             </div>
           </div>
@@ -211,7 +185,7 @@ export const Header: React.FC<HeaderProps> = ({ currentTheme, onThemeChange, onO
                 onClick={() => setMobileMenuOpen(false)}
                 className={`px-3 py-2 rounded text-sm font-medium transition-colors ${
                   activeSection === link.id
-                    ? `${currentTheme === 'rust' ? 'bg-[#ffdad2]/30 text-[#d9480f]' : 'bg-[#dde1ff]/40 text-[#0040da]'} font-semibold`
+                    ? `${currentTheme === 'light' ? 'bg-indigo-50 text-indigo-700' : 'bg-sky-950/80 text-sky-300'} font-semibold`
                     : 'text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800'
                 }`}
               >

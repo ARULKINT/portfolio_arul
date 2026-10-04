@@ -13,11 +13,11 @@ import { ResumeModal } from './components/ResumeModal';
 import { Footer } from './components/Footer';
 
 export default function App() {
-  const [theme, setTheme] = useState<PortfolioTheme>('cobalt');
+  const [theme, setTheme] = useState<PortfolioTheme>('obsidian');
   const [isResumeOpen, setIsResumeOpen] = useState(false);
   const [projectsFilter, setProjectsFilter] = useState<string>('all');
 
-  // Sync dark class on document for obsidian theme
+  // Sync dark class on document for obsidian (dark) theme
   useEffect(() => {
     if (theme === 'obsidian') {
       document.documentElement.classList.add('dark');
@@ -25,13 +25,8 @@ export default function App() {
       document.body.style.color = '#f4f2ec';
     } else {
       document.documentElement.classList.remove('dark');
-      if (theme === 'rust') {
-        document.body.style.backgroundColor = '#f4f2ec';
-        document.body.style.color = '#141517';
-      } else {
-        document.body.style.backgroundColor = '#fcf9f8';
-        document.body.style.color = '#1c1b1b';
-      }
+      document.body.style.backgroundColor = '#ffffff';
+      document.body.style.color = '#0f1013';
     }
   }, [theme]);
 
@@ -43,10 +38,7 @@ export default function App() {
     if (theme === 'obsidian') {
       return 'bg-[#0f1013] text-[#f4f2ec]';
     }
-    if (theme === 'rust') {
-      return 'bg-[#f4f2ec] text-[#141517]';
-    }
-    return 'bg-[#fcf9f8] text-[#1c1b1b]';
+    return 'bg-white text-[#0f1013]';
   };
 
   return (

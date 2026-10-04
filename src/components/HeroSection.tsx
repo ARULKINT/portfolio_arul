@@ -10,15 +10,12 @@ interface HeroSectionProps {
 export const HeroSection: React.FC<HeroSectionProps> = ({ theme, onOpenResume }) => {
   const [inspectedNode, setInspectedNode] = useState<TelemetryNode | null>(null);
 
-  const isRust = theme === 'rust';
-  const isObsidian = theme === 'obsidian';
+  const isLight = theme === 'light';
 
-  const textPrimary = isRust ? 'text-[#d9480f]' : isObsidian ? 'text-sky-400' : 'text-[#0040da]';
-  const btnExplore = isRust
-    ? 'bg-[#1b1d21] text-white hover:bg-[#d9480f]'
-    : isObsidian
-    ? 'bg-sky-600 text-white hover:bg-sky-500'
-    : 'bg-[#1c1b1b] text-white hover:bg-[#0040da]';
+  const textPrimary = isLight ? 'text-[#0040da]' : 'text-sky-400';
+  const btnExplore = isLight
+    ? 'bg-neutral-900 text-white hover:bg-[#0040da]'
+    : 'bg-sky-600 text-white hover:bg-sky-500';
 
   return (
     <section className="w-full border-b transition-colors relative overflow-hidden pt-6 pb-12 lg:py-16">
@@ -30,8 +27,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ theme, onOpenResume })
             <div className="flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center gap-2 px-3 py-1 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded font-mono text-[11px] font-semibold tracking-wider uppercase shadow-2xs">
                 <span className="relative flex h-2 w-2">
-                  <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${isRust ? 'bg-[#d9480f]' : 'bg-[#0040da]'}`}></span>
-                  <span className={`relative inline-flex rounded-full h-2 w-2 ${isRust ? 'bg-[#d9480f]' : 'bg-[#0040da]'}`}></span>
+                  <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${isLight ? 'bg-indigo-600' : 'bg-emerald-400'}`}></span>
+                  <span className={`relative inline-flex rounded-full h-2 w-2 ${isLight ? 'bg-indigo-600' : 'bg-emerald-400'}`}></span>
                 </span>
                 <span className={textPrimary}>Open to Entry-Level Opportunities</span>
               </span>
