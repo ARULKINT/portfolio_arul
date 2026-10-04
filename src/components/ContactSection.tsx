@@ -53,21 +53,29 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ theme }) => {
     if (!senderName || !senderEmail || !senderMessage) return;
 
     setIsSubmitting(true);
-    setTransmissionLogs(['[SYS_INIT] Establishing secure TLS 1.3 socket...']);
+    setTransmissionLogs(['[SYS_INIT] Packaging email payload for aruldme004@gmail.com...']);
+
+    const mailtoSubject = encodeURIComponent(`Portfolio Inquiry from ${senderName}`);
+    const mailtoBody = encodeURIComponent(
+      `Name: ${senderName}\nEmail: ${senderEmail}\n\nMessage:\n${senderMessage}`
+    );
+    const mailtoUrl = `mailto:aruldme004@gmail.com?subject=${mailtoSubject}&body=${mailtoBody}`;
 
     setTimeout(() => {
       setTransmissionLogs((prev) => [
         ...prev,
-        `[AUTH_VERIFIED] Payload encrypted for Arul (Node: India-South).`,
-        `[ROUTING] Packaging transmission parameters...`
+        `[ROUTING] Triggering native mail client (mailto:aruldme004@gmail.com)...`,
+        `[LAUNCH] Email client window requested.`
       ]);
+      // Trigger mail client
+      window.location.href = mailtoUrl;
     }, 400);
 
     setTimeout(() => {
       setTransmissionLogs((prev) => [
         ...prev,
-        `[200_DISPATCH_ACK] Transmission successfully delivered!`,
-        `[LOG] Arul will review your opportunity inquiry promptly.`
+        `[200_DISPATCH_ACK] Message pre-filled in mail client!`,
+        `[LOG] Please click "Send" in your mail app to complete delivery.`
       ]);
       setIsSubmitting(false);
       setIsDispatched(true);
@@ -259,7 +267,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ theme }) => {
                   </div>
 
                   <div className="p-3 bg-emerald-950/40 border border-emerald-700/60 rounded text-xs text-emerald-200 leading-relaxed">
-                    Thank you, <strong>{senderName}</strong>. Your inquiry has been logged and queued. A verification receipt was transmitted to <strong>{senderEmail}</strong>.
+                    Thank you, <strong>{senderName}</strong>. Your message was prepared and opened in your email client addressed to <strong>aruldme004@gmail.com</strong>. Click <strong>Send</strong> in your mail app to complete delivery.
                   </div>
 
                   <button
