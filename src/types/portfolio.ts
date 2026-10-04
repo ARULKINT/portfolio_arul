@@ -15,6 +15,12 @@ export interface Project {
   tags: string[];
   githubUrl: string;
   demoUrl?: string;
+  isPriority?: boolean;
+  priorityTag?: string;
+  demoCredentials?: {
+    id: string;
+    pass: string;
+  };
   codeSnippet?: {
     filename: string;
     runtime: string;

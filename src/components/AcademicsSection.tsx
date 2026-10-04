@@ -41,13 +41,12 @@ export const AcademicsSection: React.FC<AcademicsSectionProps> = ({ theme }) => 
                 <div className="flex items-center justify-between text-neutral-500 font-mono text-xs mb-2">
                   <span className={`font-bold ${idx === 0 ? textPrimary : ''}`}>{entry.degreeType}</span>
                   <span
-                    className={`px-2 py-0.5 rounded font-mono text-[11px] uppercase font-semibold border ${
-                      entry.status === 'In Progress'
+                    className={`px-2 py-0.5 rounded font-mono text-[11px] uppercase font-semibold border ${entry.status === 'In Progress'
                         ? isLight
                           ? 'bg-indigo-50 text-indigo-700 border-indigo-300'
                           : 'bg-sky-950/80 text-sky-300 border-sky-700'
                         : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-neutral-300 dark:border-neutral-700'
-                    }`}
+                      }`}
                   >
                     {entry.status}
                   </span>

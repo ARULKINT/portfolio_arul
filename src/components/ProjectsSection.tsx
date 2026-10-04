@@ -356,11 +356,22 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ theme, initial
               <article
                 key={project.id}
                 onClick={() => setSelectedProject(project)}
-                className={`bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded p-6 flex flex-col justify-between transition-all cursor-pointer ${hoverBorder} shadow-2xs group`}
+                className={`bg-white dark:bg-neutral-900 border rounded p-6 flex flex-col justify-between transition-all cursor-pointer ${hoverBorder} shadow-2xs group relative overflow-hidden ${
+                  project.isPriority
+                    ? 'border-indigo-500/50 dark:border-sky-500/50 shadow-xs'
+                    : 'border-neutral-300 dark:border-neutral-700'
+                }`}
               >
                 <div>
                   <div className="flex items-center justify-between text-neutral-500 text-xs font-mono mb-2">
-                    <span>{project.number} // {project.categoryTag}</span>
+                    <span className="flex items-center gap-1.5">
+                      <span>{project.number} // {project.categoryTag}</span>
+                      {project.isPriority && (
+                        <span className="px-1.5 py-0.2 rounded text-[10px] font-bold bg-indigo-50 text-indigo-700 dark:bg-sky-950 dark:text-sky-300 border border-indigo-200 dark:border-sky-800 uppercase">
+                          TOP PRIORITY
+                        </span>
+                      )}
+                    </span>
                     <span className={`font-semibold ${textPrimary}`}>[{project.badge}]</span>
                   </div>
 
@@ -368,9 +379,20 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ theme, initial
                     {project.title}
                   </h3>
 
-                  <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mb-4 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mb-3 leading-relaxed">
                     {project.description}
                   </p>
+
+                  {/* Demo Credentials Pill if available */}
+                  {project.demoCredentials && (
+                    <div className="mb-3 px-2.5 py-1 bg-amber-50 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-700/80 rounded font-mono text-[11px] text-amber-900 dark:text-amber-200 flex items-center justify-between">
+                      <span className="font-semibold flex items-center gap-1">
+                        <span className="material-symbols-outlined text-[14px]">key</span>
+                        <span>Demo Login:</span>
+                      </span>
+                      <span>ID: <strong className="text-amber-950 dark:text-amber-100">{project.demoCredentials.id}</strong> | Pass: <strong className="text-amber-950 dark:text-amber-100">{project.demoCredentials.pass}</strong></span>
+                    </div>
+                  )}
                 </div>
 
                 <div>

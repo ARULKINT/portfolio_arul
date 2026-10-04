@@ -44,6 +44,51 @@ export const TELEMETRY_NODES: TelemetryNode[] = [
 ];
 
 export const PROJECTS: Project[] = [
+  // --- DATA ENGINEERING / ANALYTICS ---
+  {
+    id: 'commerce-pulse',
+    number: '02',
+    categoryTag: 'DATA_ENGINEERING',
+    filterCategory: 'engineering',
+    badge: 'Architecture Dossier',
+    status: 'STATUS: PIPELINE_DESIGNED',
+    title: 'CommercePulse — E-commerce Data Architecture',
+    description: 'Documented end-to-end data engineering platform processing e-commerce transaction data through ingestion, transformation, data quality validation, star schema storage, and Airflow orchestration.',
+    problem: 'High-frequency e-commerce orders causing data quality drifts and unvalidated analytical metrics.',
+    architecture: 'Python & PySpark ETL -> PostgreSQL Data Warehouse -> Apache Airflow DAGs -> Metabase/Power BI.',
+    metric: 'Full Star Schema ETL',
+    tags: ['Python', 'PySpark', 'PostgreSQL', 'Airflow', 'Docker', 'GitHub Actions', 'Power BI'],
+    githubUrl: 'https://github.com/ARULKINT/portfolio_arul',
+    isPriority: true,
+    priorityTag: 'PRIORITY_01',
+    codeSnippet: {
+      filename: 'commerce_dag.py',
+      runtime: 'AIRFLOW-DAG [SCHEDULED]',
+      code: `from airflow import DAG
+from airflow.operators.python import PythonOperator
+from datetime import datetime, timedelta
+
+default_args = {
+    'owner': 'arul',
+    'retries': 2,
+    'retry_delay': timedelta(minutes=5)
+}
+
+with DAG('commerce_pulse_etl', start_date=datetime(2026, 1, 1), schedule_interval='@daily', default_args=default_args) as dag:
+    validate_orders = PythonOperator(task_id='validate_orders', python_callable=run_data_quality_checks)
+    transform_dim = PythonOperator(task_id='transform_star_schema', python_callable=pyspark_transform_job)
+    validate_orders >> transform_dim`
+    },
+    deepDive: {
+      overview: 'Complete dimensional data warehouse model (Fact Orders, Dim Customer, Dim Product, Dim Date) designed to handle e-commerce operations with automated data quality checks.',
+      keyDecisions: [
+        'Designed idempotent Airflow DAG tasks to prevent duplicate transactions on pipeline retries.',
+        'Constructed star-schema data models optimizing OLAP reporting queries.',
+        'Integrated automated GitHub Actions CI/CD workflows for dbt and SQL validation.'
+      ],
+      interactiveType: 'airflow-dag'
+    }
+  },
   {
     id: 'weather-data-eng',
     number: '01',
@@ -95,48 +140,6 @@ weather_df.write \\
     }
   },
   {
-    id: 'commerce-pulse',
-    number: '02',
-    categoryTag: 'DATA_ENGINEERING',
-    filterCategory: 'engineering',
-    badge: 'Architecture Dossier',
-    status: 'STATUS: PIPELINE_DESIGNED',
-    title: 'CommercePulse — E-commerce Data Architecture',
-    description: 'Documented end-to-end data engineering platform processing e-commerce transaction data through ingestion, transformation, data quality validation, star schema storage, and Airflow orchestration.',
-    problem: 'High-frequency e-commerce orders causing data quality drifts and unvalidated analytical metrics.',
-    architecture: 'Python & PySpark ETL -> PostgreSQL Data Warehouse -> Apache Airflow DAGs -> Metabase/Power BI.',
-    metric: 'Full Star Schema ETL',
-    tags: ['Python', 'PySpark', 'PostgreSQL', 'Airflow', 'Docker', 'GitHub Actions', 'Power BI'],
-    githubUrl: 'https://github.com/ARULKINT/portfolio_arul',
-    codeSnippet: {
-      filename: 'commerce_dag.py',
-      runtime: 'AIRFLOW-DAG [SCHEDULED]',
-      code: `from airflow import DAG
-from airflow.operators.python import PythonOperator
-from datetime import datetime, timedelta
-
-default_args = {
-    'owner': 'arul',
-    'retries': 2,
-    'retry_delay': timedelta(minutes=5)
-}
-
-with DAG('commerce_pulse_etl', start_date=datetime(2026, 1, 1), schedule_interval='@daily', default_args=default_args) as dag:
-    validate_orders = PythonOperator(task_id='validate_orders', python_callable=run_data_quality_checks)
-    transform_dim = PythonOperator(task_id='transform_star_schema', python_callable=pyspark_transform_job)
-    validate_orders >> transform_dim`
-    },
-    deepDive: {
-      overview: 'Complete dimensional data warehouse model (Fact Orders, Dim Customer, Dim Product, Dim Date) designed to handle e-commerce operations with automated data quality checks.',
-      keyDecisions: [
-        'Designed idempotent Airflow DAG tasks to prevent duplicate transactions on pipeline retries.',
-        'Constructed star-schema data models optimizing OLAP reporting queries.',
-        'Integrated automated GitHub Actions CI/CD workflows for dbt and SQL validation.'
-      ],
-      interactiveType: 'airflow-dag'
-    }
-  },
-  {
     id: 'uber-data-eng',
     number: '03',
     categoryTag: 'DATA_ENGINEERING',
@@ -175,6 +178,47 @@ GROUP BY r.rate_code_name ORDER BY avg_fare DESC;`
     }
   },
   {
+    id: 'lead-analytics',
+    number: '05',
+    categoryTag: 'DATA_ANALYTICS',
+    filterCategory: 'analytics',
+    badge: 'Power BI & Python ETL',
+    status: 'STATUS: PRODUCTION_ETL_COMPLETE',
+    title: 'Lead Acquisition & Employee Performance Analysis',
+    description: 'End-to-end data analytics and business intelligence solution analyzing acquisition funnel dynamics (360 leads across 4 weekly cycles), demographic conversion trends, and sales manager performance (4 Senior Managers, 16 Junior Managers, 2,192 phone interactions).',
+    problem: 'High lead drop-off at demo stage (46.11% loss) and a 3.2x performance gap between top (SNR501MG at 24.47%) and bottom (SNR503MG at 12.24%) sales manager teams requiring automated ETL, outlier rules, and DAX metric benchmarking.',
+    architecture: 'Raw CSV Ingestion -> Python Automated ETL & Outliers Handler -> Star Schema PostgreSQL Data Model -> 15 DAX Measures -> Power BI Dashboard Workspace (qasq.pbix).',
+    metric: '17.78% Overall Conv Rate',
+    tags: ['Python', 'Power BI', 'DAX', 'PostgreSQL', 'ETL Data Cleaning', 'Star Schema', 'Outlier Audit'],
+    githubUrl: 'https://github.com/ARULKINT/sales-etl-pipeline_001',
+    metricsPanel: {
+      title: 'LEAD_ACQUISITION_FUNNEL',
+      statusLabel: 'CLEANED_DATASET',
+      submetricLabel: 'Email Channel Conv Rate',
+      value: '26.03%',
+      subvalue: '(360 leads / 2,192 calls)',
+      badge: 'TOP_CHANNEL',
+      sqlQuery: `SELECT lead_gen_source,
+       COUNT(lead_id) AS total_leads,
+       COUNT(CASE WHEN lead_stage = 'conversion' THEN 1 END) AS converted_leads,
+       ROUND((COUNT(CASE WHEN lead_stage = 'conversion' THEN 1 END)::numeric / COUNT(lead_id)) * 100, 2) AS conv_rate_pct
+FROM leads_summary_view
+GROUP BY lead_gen_source
+ORDER BY conv_rate_pct DESC;`
+    },
+    deepDive: {
+      overview: 'Analyzed 360 unique leads, 2,192 phone interactions, and 4 sales manager cohorts. Identified top conversion channel (Email Marketing at 26.03%) and top geographic market (Bengaluru at 29.41%). Built automated Python script for age & percentage outlier capping.',
+      keyDecisions: [
+        'Built automated Python ETL script to sanitize age anomalies (ages 211, 116) and cap demo watched % at 100%.',
+        'Authored 15 custom DAX measures for dynamic funnel stage conversion and call success rates.',
+        'Identified top drop-off bottlenecks: Price sensitivity ("Can\'t afford" = 95 mentions) and preference for offline classes (91 mentions).'
+      ],
+      interactiveType: 'sql-runner'
+    }
+  },
+
+  // --- SOFTWARE DEVELOPMENT & APPLICATIONS (PRIORITY 1) ---
+  {
     id: 'rowdesk-crm',
     number: '04',
     categoryTag: 'FULL_STACK',
@@ -189,6 +233,12 @@ GROUP BY r.rate_code_name ORDER BY avg_fare DESC;`
     tags: ['Next.js', 'React', 'Prisma', 'Neon PostgreSQL', 'Zod', 'Google OAuth', 'Vitest'],
     githubUrl: 'https://github.com/ARULKINT/rowdesk',
     demoUrl: 'https://crm-fx2.vercel.app/',
+    isPriority: true,
+    priorityTag: 'PRIORITY_01',
+    demoCredentials: {
+      id: 'admin',
+      pass: 'Admin@1234'
+    },
     codeSnippet: {
       filename: 'lead_route.ts',
       runtime: 'NEXT.JS API ROUTE',
@@ -216,53 +266,145 @@ export async function POST(req: Request) {
 }`
     },
     deepDive: {
-      overview: 'Rowdesk provides a robust workflow platform with database persistence via Prisma & Neon PostgreSQL. Includes full validation pipelines using Zod and automated Vitest suites.',
+      overview: 'Rowdesk provides a robust workflow platform with database persistence via Prisma & Neon PostgreSQL. Includes full validation pipelines using Zod, automated Vitest suites, and instant admin login credentials (ID: admin, Pass: Admin@1234).',
       keyDecisions: [
+        'Provided instant demo login access: ID: admin | Password: Admin@1234.',
         'Integrated Google Drive OAuth for seamless document reference attachment.',
-        'Deployed serverless Postgres on Neon with instant connection pooling.',
-        'Verified end-to-end reliability using automated Vitest unit & API tests.'
+        'Deployed serverless Postgres on Neon with instant connection pooling.'
       ],
       interactiveType: 'api-request'
     }
   },
   {
-    id: 'lead-analytics',
-    number: '05',
-    categoryTag: 'DATA_ANALYTICS',
-    filterCategory: 'analytics',
-    badge: 'Claude Code Automation',
-    status: 'STATUS: ANALYTICS_COMPLETE',
-    title: 'Lead Acquisition Funnel Analytics',
-    description: 'Analytics project examining 360 lead acquisition records and 2,192 call follow-up entries collected via a custom Google Maps scraper built with Claude Code.',
-    problem: 'Unstructured business listing scrapings requiring cleansing, normalization, and conversion analytics.',
-    architecture: 'Claude Code Scraper -> Python Data Cleansing -> DAX Expressions -> Power BI Funnel.',
-    metric: '2,192 Call Records Analyzed',
-    tags: ['Python', 'Power BI', 'DAX', 'Data Cleansing', 'Claude Code'],
-    githubUrl: 'https://github.com/ARULKINT/portfolio_arul',
-    metricsPanel: {
-      title: 'LEAD_FUNNEL_TELEMETRY',
-      statusLabel: 'PARSED_DATASET',
-      submetricLabel: 'Funnel Conversion Rate',
-      value: '14.8%',
-      subvalue: '(360 leads / 2.1k calls)',
-      badge: 'DAX_MEASURE',
-      sqlQuery: `SELECT call_outcome, 
-       COUNT(call_id) AS total_calls,
-       ROUND((COUNT(call_id)::numeric / 2192) * 100, 2) AS outcome_pct
-FROM lead_call_logs 
-GROUP BY call_outcome 
-ORDER BY total_calls DESC;`
-    },
+    id: 'forge-and-flint',
+    number: '07',
+    categoryTag: 'SOFTWARE_APPS',
+    filterCategory: 'applications',
+    badge: 'Founder Initiative',
+    status: 'STATUS: WEBSITE_LIVE',
+    title: 'Forge & Flint — Software Solutions Initiative',
+    description: 'Software solutions initiative focused on practical business software, including CRM, billing, inventory, and digital solutions for small and growing enterprises.',
+    problem: 'Small businesses struggling with fragmented digital tools and complex enterprise pricing.',
+    architecture: 'React Frontend -> Vite Build -> Express API -> PostgreSQL Database.',
+    metric: 'Live Digital Initiative',
+    tags: ['React', 'Vite', 'Express', 'PostgreSQL', 'Node.js'],
+    githubUrl: 'https://github.com/ARULKINT/forge-flint-website',
+    demoUrl: 'https://forgeandflint.in/',
+    isPriority: true,
+    priorityTag: 'PRIORITY_01',
     deepDive: {
-      overview: 'Analyzed sales outreach effectiveness by combining scraper data with call attempt records to calculate true lead velocity and drop-off points.',
+      overview: 'Founded Forge & Flint to architect modern, intuitive web applications for regional business workflows. Designed responsive user interfaces and scalable Express microservices.',
       keyDecisions: [
-        'Built Python cleaning scripts to deduplicate business listings and standardize telephone formats.',
-        'Wrote custom DAX measures for rolling 7-day lead conversion metrics.',
-        'Created executive funnel visualizations highlighting optimal call response times.'
+        'Established modular component design systems in React for rapid client customization.',
+        'Built REST APIs in Express with clean route controllers and PostgreSQL database integration.',
+        'Deployed production web presence at forgeandflint.in.'
       ],
-      interactiveType: 'sql-runner'
+      interactiveType: 'api-request'
     }
   },
+  {
+    id: 'textile-crm',
+    number: '08',
+    categoryTag: 'FULL_STACK',
+    filterCategory: 'fullstack',
+    badge: 'NextAuth Security',
+    status: 'STATUS: GITHUB_VERIFIED',
+    title: 'Textile Retail CRM Prototype',
+    description: 'CRM prototype tailored for textile retail management featuring customer billing history, inventory cataloging, and NextAuth role-based authentication.',
+    problem: 'Textile retail stores requiring specialized inventory tracking for fabric variants and customer ledgers.',
+    architecture: 'Next.js App Router -> Prisma ORM -> SQLite Database -> NextAuth.js.',
+    metric: 'Role-Based Authentication',
+    tags: ['Next.js', 'Prisma', 'SQLite', 'NextAuth', 'TypeScript'],
+    githubUrl: 'https://github.com/ARULKINT/textile-crm',
+    isPriority: true,
+    priorityTag: 'PRIORITY_01',
+    deepDive: {
+      overview: 'Designed around retail textile business needs, providing secure multi-user role management (Manager, Billing Staff) via NextAuth.',
+      keyDecisions: [
+        'Implemented Prisma schema relations mapping fabric SKUs to sales receipts.',
+        'Utilized NextAuth for secure session cookie management.',
+        'Ensured lightweight deployment with SQLite file database support.'
+      ],
+      interactiveType: 'api-request'
+    }
+  },
+  {
+    id: 'pandian-hotel',
+    number: '09',
+    categoryTag: 'SOFTWARE_APPS',
+    filterCategory: 'applications',
+    badge: 'Netlify Live',
+    status: 'STATUS: LIVE_VERIFIED',
+    title: 'Pandian Hotel & Room Stay Booking App',
+    description: 'Hotel booking web application featuring interactive room selection, reservation forms, and backend integration with Neon PostgreSQL.',
+    problem: 'Manual hotel room booking resulting in double-booking conflicts and slow reservation confirmations.',
+    architecture: 'JavaScript Browser App -> Express Backend -> Neon PostgreSQL -> Netlify Host.',
+    metric: 'Deployed Hotel App',
+    tags: ['JavaScript', 'Express', 'Neon PostgreSQL', 'Netlify', 'HTML/CSS'],
+    githubUrl: 'https://github.com/ARULKINT/pandian-hotel-room-stay',
+    demoUrl: 'https://eloquent-blancmange-9d37ea.netlify.app/',
+    isPriority: true,
+    priorityTag: 'PRIORITY_01',
+    deepDive: {
+      overview: 'Provides an intuitive booking interface for room availability queries, guest details submission, and backend state persistence.',
+      keyDecisions: [
+        'Integrated Neon PostgreSQL for cloud-hosted relational room reservation storage.',
+        'Built responsive CSS booking widgets for mobile guest access.',
+        'Deployed frontend application cleanly to Netlify CDN.'
+      ],
+      interactiveType: 'gps-telemetry'
+    }
+  },
+  {
+    id: 'portfolio-sdlc',
+    number: '11',
+    categoryTag: 'FULL_STACK',
+    filterCategory: 'fullstack',
+    badge: '19 SDLC Docs Built',
+    status: 'STATUS: LIVE_PAGES',
+    title: 'Personal Portfolio & SDLC Architecture Platform',
+    description: 'Production developer portfolio & full SDLC documentation architecture covering 19 markdown technical specifications across planning, architecture, API schemas, test plans, security audits, and automated GitHub Pages CI/CD.',
+    problem: 'Need for a high-performance, dark/light theme adaptable portfolio with complete software lifecycle documentation and live resume preview capabilities.',
+    architecture: 'React 19 -> Vite -> TypeScript -> Tailwind CSS v4 -> GitHub Actions -> GitHub Pages.',
+    metric: '19 SDLC Specs Completed',
+    tags: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'SDLC', 'GitHub Actions', 'GitHub Pages'],
+    githubUrl: 'https://github.com/ARULKINT/portfolio_arul',
+    demoUrl: 'https://ARULKINT.github.io/portfolio_arul/',
+    isPriority: true,
+    priorityTag: 'PRIORITY_01',
+    codeSnippet: {
+      filename: 'deploy.yml',
+      runtime: 'GITHUB-ACTIONS [DEPLOY_PAGES]',
+      code: `name: Deploy Portfolio to GitHub Pages
+on:
+  push:
+    branches: [ main ]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm ci
+      - run: npm run build
+      - uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist
+          branch: gh-pages`
+    },
+    deepDive: {
+      overview: 'Full SDLC documentation suite (Planning, SAD, API, Test Plan, Security) and clean React single-page interface with dual theme engines.',
+      keyDecisions: [
+        'Constructed 19 comprehensive SDLC markdown documents for complete project transparency.',
+        'Engineered obsidian dark mode and high-contrast light mode state engines.',
+        'Configured automated prebuild scripts bundling resume files into static production assets.'
+      ],
+      interactiveType: 'api-request'
+    }
+  },
+
+  // --- SECONDARY / LAST PRIORITY SOFTWARE APPS ---
   {
     id: 'hello-mobiles-crm',
     number: '06',
@@ -289,80 +431,6 @@ ORDER BY total_calls DESC;`
     }
   },
   {
-    id: 'forge-and-flint',
-    number: '07',
-    categoryTag: 'SOFTWARE_APPS',
-    filterCategory: 'applications',
-    badge: 'Founder Initiative',
-    status: 'STATUS: WEBSITE_LIVE',
-    title: 'Forge & Flint — Software Solutions Initiative',
-    description: 'Software solutions initiative focused on practical business software, including CRM, billing, inventory, and digital solutions for small and growing enterprises.',
-    problem: 'Small businesses struggling with fragmented digital tools and complex enterprise pricing.',
-    architecture: 'React Frontend -> Vite Build -> Express API -> PostgreSQL Database.',
-    metric: 'Live Digital Initiative',
-    tags: ['React', 'Vite', 'Express', 'PostgreSQL', 'Node.js'],
-    githubUrl: 'https://github.com/ARULKINT/portfolio_arul',
-    demoUrl: 'https://forgeandflint.in/',
-    deepDive: {
-      overview: 'Founded Forge & Flint to architect modern, intuitive web applications for regional business workflows. Designed responsive user interfaces and scalable Express microservices.',
-      keyDecisions: [
-        'Established modular component design systems in React for rapid client customization.',
-        'Built REST APIs in Express with clean route controllers and PostgreSQL database integration.',
-        'Deployed production web presence at forgeandflint.in.'
-      ],
-      interactiveType: 'api-request'
-    }
-  },
-  {
-    id: 'textile-crm',
-    number: '08',
-    categoryTag: 'FULL_STACK',
-    filterCategory: 'fullstack',
-    badge: 'NextAuth Security',
-    status: 'STATUS: GITHUB_VERIFIED',
-    title: 'Textile Retail CRM Prototype',
-    description: 'CRM prototype tailored for textile retail management featuring customer billing history, inventory cataloging, and NextAuth role-based authentication.',
-    problem: 'Textile retail stores requiring specialized inventory tracking for fabric variants and customer ledgers.',
-    architecture: 'Next.js App Router -> Prisma ORM -> SQLite Database -> NextAuth.js.',
-    metric: 'Role-Based Authentication',
-    tags: ['Next.js', 'Prisma', 'SQLite', 'NextAuth', 'TypeScript'],
-    githubUrl: 'https://github.com/ARULKINT/textile-crm',
-    deepDive: {
-      overview: 'Designed around retail textile business needs, providing secure multi-user role management (Manager, Billing Staff) via NextAuth.',
-      keyDecisions: [
-        'Implemented Prisma schema relations mapping fabric SKUs to sales receipts.',
-        'Utilized NextAuth for secure session cookie management.',
-        'Ensured lightweight deployment with SQLite file database support.'
-      ],
-      interactiveType: 'api-request'
-    }
-  },
-  {
-    id: 'pandian-hotel',
-    number: '09',
-    categoryTag: 'SOFTWARE_APPS',
-    filterCategory: 'applications',
-    badge: 'Netlify Live',
-    status: 'STATUS: LIVE_VERIFIED',
-    title: 'Pandian Hotel & Room Stay Booking App',
-    description: 'Hotel booking web application featuring interactive room selection, reservation forms, and backend integration with Neon PostgreSQL.',
-    problem: 'Manual hotel room booking resulting in double-booking conflicts and slow reservation confirmations.',
-    architecture: 'JavaScript Browser App -> Express Backend -> Neon PostgreSQL -> Netlify Host.',
-    metric: 'Deployed Hotel App',
-    tags: ['JavaScript', 'Express', 'Neon PostgreSQL', 'Netlify', 'HTML/CSS'],
-    githubUrl: 'https://github.com/ARULKINT/pandian-hotel-room-stay',
-    demoUrl: 'https://eloquent-blancmange-9d37ea.netlify.app/',
-    deepDive: {
-      overview: 'Provides an intuitive booking interface for room availability queries, guest details submission, and backend state persistence.',
-      keyDecisions: [
-        'Integrated Neon PostgreSQL for cloud-hosted relational room reservation storage.',
-        'Built responsive CSS booking widgets for mobile guest access.',
-        'Deployed frontend application cleanly to Netlify CDN.'
-      ],
-      interactiveType: 'gps-telemetry'
-    }
-  },
-  {
     id: 'business-platform',
     number: '10',
     categoryTag: 'FULL_STACK',
@@ -375,7 +443,7 @@ ORDER BY total_calls DESC;`
     architecture: 'Fastify Backend -> React PWA Frontend -> PostgreSQL -> Redis Caching.',
     metric: 'Offline POS Capable',
     tags: ['Fastify', 'React', 'PostgreSQL', 'Redis', 'PWA', 'TypeScript'],
-    githubUrl: 'https://github.com/ARULKINT/portfolio_arul',
+    githubUrl: 'https://github.com/ARULKINT/business-platform',
     deepDive: {
       overview: 'Architected with tenant isolation in PostgreSQL and Service Worker offline caching for uninterrupted point-of-sale operations.',
       keyDecisions: [
@@ -502,7 +570,7 @@ export const EXPERIENCE: ExperienceItem = {
 export const ACADEMICS: AcademicItem[] = [
   {
     degreeType: 'DEGREE // B.TECH CSE',
-    status: 'In Progress',
+    status: 'Completed',
     title: 'B.Tech in Computer Science and Engineering (Lateral Entry)',
     institution: 'Rajiv Gandhi College of Engineering and Technology, Pondicherry University',
     description: 'Specialized in computer science engineering, data structures, algorithms, database management systems, operating systems, software engineering, and data pipeline architectures.',

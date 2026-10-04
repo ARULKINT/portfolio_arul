@@ -51,6 +51,15 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, theme, onCl
             <p className="text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed">
               {project.description}
             </p>
+            {project.demoCredentials && (
+              <div className="mt-3 p-3 bg-amber-50 dark:bg-amber-950/70 border border-amber-300 dark:border-amber-700/80 rounded font-mono text-xs text-amber-900 dark:text-amber-200 flex items-center justify-between">
+                <span className="font-bold flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-[18px]">key</span>
+                  <span>Live App Demo Credentials:</span>
+                </span>
+                <span>ID: <strong className="text-amber-950 dark:text-amber-100 font-bold">{project.demoCredentials.id}</strong> | Password: <strong className="text-amber-950 dark:text-amber-100 font-bold">{project.demoCredentials.pass}</strong></span>
+              </div>
+            )}
           </div>
 
           {/* Quick Metrics Bar */}
