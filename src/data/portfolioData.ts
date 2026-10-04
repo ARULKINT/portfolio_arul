@@ -59,6 +59,7 @@ export const PROJECTS: Project[] = [
     metric: 'Full Star Schema ETL',
     tags: ['Python', 'PySpark', 'PostgreSQL', 'Airflow', 'Docker', 'GitHub Actions', 'Power BI'],
     githubUrl: 'https://github.com/ARULKINT/portfolio_arul',
+    docsUrl: 'https://github.com/ARULKINT/portfolio_arul/tree/main/docs',
     isPriority: true,
     priorityTag: 'PRIORITY_01',
     codeSnippet: {
@@ -103,6 +104,7 @@ with DAG('commerce_pulse_etl', start_date=datetime(2026, 1, 1), schedule_interva
     metric: '7 Indian Cities Streamed',
     tags: ['Python', 'PySpark', 'PostgreSQL', 'Docker', 'OpenWeather API', 'JDBC'],
     githubUrl: 'https://github.com/ARULKINT/weather_data_eng',
+    docsUrl: 'https://github.com/ARULKINT/weather_data_eng/tree/main/docs',
     codeSnippet: {
       filename: 'weather_spark_ingest.py',
       runtime: 'PYSPARK [OPENWEATHER_INGEST]',
@@ -153,6 +155,7 @@ weather_df.write \\
     metric: '100k+ Trip Records Modeled',
     tags: ['Python', 'Pandas', 'PostgreSQL', 'Airflow', 'dbt', 'Power BI', 'Docker'],
     githubUrl: 'https://github.com/ARULKINT/portfolio_arul',
+    docsUrl: 'https://github.com/ARULKINT/portfolio_arul/tree/main/docs',
     metricsPanel: {
       title: 'UBER_TRIP_ANALYTICS',
       statusLabel: 'STAR_SCHEMA',
@@ -191,6 +194,7 @@ GROUP BY r.rate_code_name ORDER BY avg_fare DESC;`
     metric: '17.78% Overall Conv Rate',
     tags: ['Python', 'Power BI', 'DAX', 'PostgreSQL', 'ETL Data Cleaning', 'Star Schema', 'Outlier Audit'],
     githubUrl: 'https://github.com/ARULKINT/sales-etl-pipeline_001',
+    docsUrl: 'https://github.com/ARULKINT/sales-etl-pipeline_001/tree/main/docs',
     metricsPanel: {
       title: 'LEAD_ACQUISITION_FUNNEL',
       statusLabel: 'CLEANED_DATASET',
@@ -232,6 +236,7 @@ ORDER BY conv_rate_pct DESC;`
     metric: 'Live Deployed CRM',
     tags: ['Next.js', 'React', 'Prisma', 'Neon PostgreSQL', 'Zod', 'Google OAuth', 'Vitest'],
     githubUrl: 'https://github.com/ARULKINT/rowdesk',
+    docsUrl: 'https://github.com/ARULKINT/rowdesk/tree/master/docs',
     demoUrl: 'https://crm-fx2.vercel.app/',
     isPriority: true,
     priorityTag: 'PRIORITY_01',
@@ -289,6 +294,7 @@ export async function POST(req: Request) {
     metric: 'Live Digital Initiative',
     tags: ['React', 'Vite', 'Express', 'PostgreSQL', 'Node.js'],
     githubUrl: 'https://github.com/ARULKINT/forge-flint-website',
+    docsUrl: 'https://github.com/ARULKINT/forge-flint-website/tree/main/docs',
     demoUrl: 'https://forgeandflint.in/',
     isPriority: true,
     priorityTag: 'PRIORITY_01',
@@ -316,6 +322,7 @@ export async function POST(req: Request) {
     metric: 'Role-Based Authentication',
     tags: ['Next.js', 'Prisma', 'SQLite', 'NextAuth', 'TypeScript'],
     githubUrl: 'https://github.com/ARULKINT/textile-crm',
+    docsUrl: 'https://github.com/ARULKINT/textile-crm/tree/main/docs',
     isPriority: true,
     priorityTag: 'PRIORITY_01',
     deepDive: {
@@ -342,6 +349,7 @@ export async function POST(req: Request) {
     metric: 'Deployed Hotel App',
     tags: ['JavaScript', 'Express', 'Neon PostgreSQL', 'Netlify', 'HTML/CSS'],
     githubUrl: 'https://github.com/ARULKINT/pandian-hotel-room-stay',
+    docsUrl: 'https://github.com/ARULKINT/pandian-hotel-room-stay/tree/main/docs',
     demoUrl: 'https://eloquent-blancmange-9d37ea.netlify.app/',
     isPriority: true,
     priorityTag: 'PRIORITY_01',
@@ -369,6 +377,7 @@ export async function POST(req: Request) {
     metric: '19 SDLC Specs Completed',
     tags: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'SDLC', 'GitHub Actions', 'GitHub Pages'],
     githubUrl: 'https://github.com/ARULKINT/portfolio_arul',
+    docsUrl: 'https://github.com/ARULKINT/portfolio_arul/tree/main/docs',
     demoUrl: 'https://ARULKINT.github.io/portfolio_arul/',
     isPriority: true,
     priorityTag: 'PRIORITY_01',
@@ -419,6 +428,7 @@ jobs:
     metric: 'Deployed Repair MVP',
     tags: ['FastAPI', 'Python', 'PostgreSQL', 'HTML', 'CSS', 'Vercel'],
     githubUrl: 'https://github.com/ARULKINT/hello-mobiles-crm',
+    docsUrl: 'https://github.com/ARULKINT/hello-mobiles-crm/tree/main/docs',
     demoUrl: 'https://hello-mobiles-crm.vercel.app/',
     deepDive: {
       overview: 'A lightweight, ultra-fast CRM designed for mobile service centers to track repair tickets from diagnostic intake to final customer dispatch.',
@@ -444,6 +454,7 @@ jobs:
     metric: 'Offline POS Capable',
     tags: ['Fastify', 'React', 'PostgreSQL', 'Redis', 'PWA', 'TypeScript'],
     githubUrl: 'https://github.com/ARULKINT/business-platform',
+    docsUrl: 'https://github.com/ARULKINT/business-platform/tree/main/docs',
     deepDive: {
       overview: 'Architected with tenant isolation in PostgreSQL and Service Worker offline caching for uninterrupted point-of-sale operations.',
       keyDecisions: [

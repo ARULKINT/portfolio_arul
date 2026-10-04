@@ -14,6 +14,7 @@ export interface Project {
   metric: string;
   tags: string[];
   githubUrl: string;
+  docsUrl?: string;
   demoUrl?: string;
   isPriority?: boolean;
   priorityTag?: string;

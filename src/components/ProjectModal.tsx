@@ -16,7 +16,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, theme, onCl
   const textPrimary = isLight ? 'text-indigo-600 font-bold' : 'text-sky-400';
   const activeTabClass = isLight ? 'border-indigo-600 text-indigo-600 font-bold' : 'border-sky-400 text-sky-400';
 
-  const docsFolderUrl = `${project.githubUrl}/tree/main/docs`;
+  const docsFolderUrl = project.docsUrl || `${project.githubUrl}/tree/main/docs`;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-fadeIn overflow-y-auto">
