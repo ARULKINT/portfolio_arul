@@ -9,12 +9,14 @@ interface ProjectModalProps {
 }
 
 export const ProjectModal: React.FC<ProjectModalProps> = ({ project, theme, onClose }) => {
-  const [activeTab, setActiveTab] = useState<'interactive' | 'code' | 'architecture'>('interactive');
+  const [activeTab, setActiveTab] = useState<'readme' | 'interactive' | 'code' | 'architecture'>('readme');
   const [apiStatus, setApiStatus] = useState<'idle' | 'loading' | 'success'>('idle');
 
   const isLight = theme === 'light';
   const textPrimary = isLight ? 'text-indigo-600 font-bold' : 'text-sky-400';
   const activeTabClass = isLight ? 'border-indigo-600 text-indigo-600 font-bold' : 'border-sky-400 text-sky-400';
+
+  const docsFolderUrl = `${project.githubUrl}/tree/main/docs`;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-fadeIn overflow-y-auto">
@@ -79,32 +81,161 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, theme, onCl
           </div>
 
           {/* Tab Navigation */}
-          <div className="flex items-center gap-4 border-b border-neutral-200 dark:border-neutral-800 font-mono text-xs">
+          <div className="flex flex-wrap items-center gap-4 border-b border-neutral-200 dark:border-neutral-800 font-mono text-xs">
+            <button
+              onClick={() => setActiveTab('readme')}
+              className={`pb-2 font-semibold uppercase tracking-wider transition-colors border-b-2 cursor-pointer flex items-center gap-1.5 ${
+                activeTab === 'readme' ? activeTabClass : 'border-transparent text-neutral-500 hover:text-neutral-900 dark:hover:text-white'
+              }`}
+            >
+              <span className="material-symbols-outlined text-[16px]">menu_book</span>
+              <span>README &amp; Docs</span>
+            </button>
             <button
               onClick={() => setActiveTab('interactive')}
-              className={`pb-2 font-semibold uppercase tracking-wider transition-colors border-b-2 cursor-pointer ${
+              className={`pb-2 font-semibold uppercase tracking-wider transition-colors border-b-2 cursor-pointer flex items-center gap-1.5 ${
                 activeTab === 'interactive' ? activeTabClass : 'border-transparent text-neutral-500 hover:text-neutral-900 dark:hover:text-white'
               }`}
             >
-              Live Interactive Sandbox
+              <span className="material-symbols-outlined text-[16px]">terminal</span>
+              <span>Interactive Sandbox</span>
             </button>
             <button
               onClick={() => setActiveTab('code')}
-              className={`pb-2 font-semibold uppercase tracking-wider transition-colors border-b-2 cursor-pointer ${
+              className={`pb-2 font-semibold uppercase tracking-wider transition-colors border-b-2 cursor-pointer flex items-center gap-1.5 ${
                 activeTab === 'code' ? activeTabClass : 'border-transparent text-neutral-500 hover:text-neutral-900 dark:hover:text-white'
               }`}
             >
-              Source Blueprint / Code
+              <span className="material-symbols-outlined text-[16px]">code</span>
+              <span>Source Blueprint</span>
             </button>
             <button
               onClick={() => setActiveTab('architecture')}
-              className={`pb-2 font-semibold uppercase tracking-wider transition-colors border-b-2 cursor-pointer ${
+              className={`pb-2 font-semibold uppercase tracking-wider transition-colors border-b-2 cursor-pointer flex items-center gap-1.5 ${
                 activeTab === 'architecture' ? activeTabClass : 'border-transparent text-neutral-500 hover:text-neutral-900 dark:hover:text-white'
               }`}
             >
-              System Specifications
+              <span className="material-symbols-outlined text-[16px]">schema</span>
+              <span>System Specs</span>
             </button>
           </div>
+
+          {/* Tab 0: README & Docs Viewer */}
+          {activeTab === 'readme' && (
+            <div className="space-y-5">
+              {/* Primary GitHub Docs Redirect Banner */}
+              <div className="p-4 bg-indigo-50/80 dark:bg-sky-950/40 border border-indigo-200 dark:border-sky-800/80 rounded-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 bg-indigo-600 dark:bg-sky-500 text-white rounded-md shrink-0">
+                    <span className="material-symbols-outlined text-[24px]">folder_open</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-sm text-neutral-900 dark:text-white">
+                      Repository SDLC Documentation Folder (/docs)
+                    </h4>
+                    <p className="text-xs text-neutral-600 dark:text-neutral-300">
+                      View full SDLC artifacts, architecture diagrams, SRS requirements &amp; technical specs.
+                    </p>
+                  </div>
+                </div>
+                <a
+                  href={docsFolderUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 dark:bg-sky-500 dark:hover:bg-sky-400 text-white font-mono text-xs font-bold rounded flex items-center gap-2 transition-colors shrink-0 shadow-xs cursor-pointer"
+                >
+                  <span>Open Repo /docs Folder</span>
+                  <span className="material-symbols-outlined text-[16px]">open_in_new</span>
+                </a>
+              </div>
+
+              {/* Styled README Container */}
+              <div className="bg-neutral-900 text-neutral-100 rounded-lg border border-neutral-800 overflow-hidden shadow-lg font-mono text-xs">
+                {/* README Header Bar */}
+                <div className="flex items-center justify-between px-4 py-2.5 bg-neutral-950 border-b border-neutral-800 text-neutral-400">
+                  <div className="flex items-center gap-2 overflow-hidden">
+                    <span className="material-symbols-outlined text-[18px] text-sky-400 shrink-0">description</span>
+                    <span className="font-bold text-neutral-200 shrink-0">README.md</span>
+                    <span className="text-[11px] text-neutral-500 truncate">// {project.githubUrl.replace('https://github.com/', '')}</span>
+                  </div>
+                  <a
+                    href={`${project.githubUrl}#readme`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[11px] text-sky-400 hover:underline flex items-center gap-1 shrink-0"
+                  >
+                    <span>View raw on GitHub</span>
+                    <span className="material-symbols-outlined text-[14px]">arrow_outward</span>
+                  </a>
+                </div>
+
+                {/* README Content Body */}
+                <div className="p-5 sm:p-6 space-y-5 text-neutral-200 font-sans leading-relaxed">
+                  <div className="border-b border-neutral-800 pb-4">
+                    <h1 className="text-lg sm:text-xl font-bold text-white font-mono mb-2">
+                      # {project.title}
+                    </h1>
+                    <p className="text-xs sm:text-sm text-neutral-400">
+                      {project.description}
+                    </p>
+                  </div>
+
+                  <div className="space-y-2 font-mono text-xs">
+                    <h2 className="text-xs sm:text-sm font-bold text-sky-400 uppercase tracking-wider flex items-center gap-2">
+                      <span>## 🎯 Executive Overview &amp; Problem Statement</span>
+                    </h2>
+                    <div className="p-3.5 bg-neutral-950/80 rounded border border-neutral-800 text-neutral-300 leading-relaxed font-sans text-xs">
+                      {project.problem}
+                    </div>
+                  </div>
+
+                  <div className="space-y-2 font-mono text-xs">
+                    <h2 className="text-xs sm:text-sm font-bold text-sky-400 uppercase tracking-wider flex items-center gap-2">
+                      <span>## 🏗️ System Architecture &amp; Tech Stack</span>
+                    </h2>
+                    <div className="p-3.5 bg-neutral-950/80 rounded border border-neutral-800 text-neutral-300 leading-relaxed font-sans text-xs space-y-2">
+                      <p><strong className="text-white font-mono">Architecture:</strong> {project.architecture}</p>
+                      <div className="flex flex-wrap gap-1.5 pt-1 font-mono text-[11px]">
+                        {project.tags.map((t) => (
+                          <span key={t} className="px-2 py-0.5 bg-neutral-800 text-sky-300 rounded border border-neutral-700">
+                            `{t}`
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {project.deepDive?.overview && (
+                    <div className="space-y-2 font-mono text-xs">
+                      <h2 className="text-xs sm:text-sm font-bold text-sky-400 uppercase tracking-wider flex items-center gap-2">
+                        <span>## 💡 Key Architectural Implementation</span>
+                      </h2>
+                      <div className="p-3.5 bg-neutral-950/80 rounded border border-neutral-800 text-neutral-300 leading-relaxed font-sans text-xs space-y-2">
+                        <p>{project.deepDive.overview}</p>
+                        {project.deepDive.keyDecisions && project.deepDive.keyDecisions.length > 0 && (
+                          <ul className="list-disc pl-5 space-y-1 text-neutral-400 pt-1">
+                            {project.deepDive.keyDecisions.map((dec, idx) => (
+                              <li key={idx}>{dec}</li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="space-y-2 font-mono text-xs">
+                    <h2 className="text-xs sm:text-sm font-bold text-sky-400 uppercase tracking-wider flex items-center gap-2">
+                      <span>## 📊 Target Impact &amp; Results</span>
+                    </h2>
+                    <div className="p-3 bg-neutral-950/80 rounded border border-neutral-800 font-mono text-xs text-emerald-400 flex items-center justify-between">
+                      <span>Primary Metric Result:</span>
+                      <strong className="text-sm text-white font-bold">{project.metric}</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Tab 1: Interactive Sandbox */}
           {activeTab === 'interactive' && (
@@ -294,7 +425,7 @@ def execute_pipeline():
 
         {/* Modal Footer Controls */}
         <div className="px-6 py-4 border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/90 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex flex-wrap items-center gap-4 font-mono text-xs">
+          <div className="flex flex-wrap items-center gap-3 font-mono text-xs">
             <a
               href={project.githubUrl}
               target="_blank"
@@ -302,12 +433,24 @@ def execute_pipeline():
               className="inline-flex items-center gap-1.5 text-neutral-800 dark:text-neutral-200 hover:text-[#0040da] font-semibold transition-colors"
             >
               <span className="material-symbols-outlined text-[16px]">code</span>
-              <span>Inspect GitHub Repository</span>
+              <span>Inspect GitHub</span>
+            </a>
+
+            <span className="text-neutral-300 dark:text-neutral-700">|</span>
+
+            <a
+              href={docsFolderUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 text-indigo-600 dark:text-sky-400 hover:underline font-semibold"
+            >
+              <span className="material-symbols-outlined text-[16px]">folder</span>
+              <span>Browse /docs Folder ↗</span>
             </a>
 
             {project.demoUrl && project.demoUrl.startsWith('http') && (
               <>
-                <span className="text-neutral-400">|</span>
+                <span className="text-neutral-300 dark:text-neutral-700">|</span>
                 <a
                   href={project.demoUrl}
                   target="_blank"

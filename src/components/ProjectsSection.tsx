@@ -20,11 +20,10 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ theme, initial
   const filterActiveBg = isLight ? 'bg-neutral-900 text-white' : 'bg-sky-600 text-white';
 
   const filterOptions = [
-    { label: 'All (10)', value: 'all' },
+    { label: 'All (11)', value: 'all' },
     { label: 'Data Engineering', value: 'engineering' },
     { label: 'Data Analytics', value: 'analytics' },
     { label: 'Full-Stack Development', value: 'fullstack' },
-    { label: 'Automation', value: 'automation' },
     { label: 'Software Applications', value: 'applications' }
   ];
 
@@ -39,9 +38,9 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ theme, initial
     return matchesCategory && matchesSearch;
   });
 
-  const featured01 = filteredProjects.find((p) => p.id === '01');
-  const featured02 = filteredProjects.find((p) => p.id === '02');
-  const gridProjects = filteredProjects.filter((p) => p.id !== '01' && p.id !== '02');
+  const featured01 = filteredProjects.length > 0 ? filteredProjects[0] : null;
+  const featured02 = filteredProjects.length > 1 ? filteredProjects[1] : null;
+  const gridProjects = filteredProjects.slice(featured02 ? 2 : (featured01 ? 1 : 0));
 
   return (
     <section className="w-full py-12 lg:py-16 border-b transition-colors" id="projects">
@@ -56,11 +55,11 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ theme, initial
               Selected Engineering Work
             </h2>
             <p className="text-sm sm:text-base text-neutral-600 dark:text-neutral-400 mt-1">
-              10 projects exploring high-throughput pipelines, analytical engines, operational automation, and full-stack software.
+              11 projects exploring high-throughput pipelines, analytical engines, operational automation, and full-stack software.
             </p>
           </div>
           <div className="font-mono text-xs text-neutral-500 dark:text-neutral-400">
-            INDEX: 10 ARCHITECTED_BUILDS
+            INDEX: 11 ARCHITECTED_BUILDS
           </div>
         </div>
 
@@ -111,13 +110,13 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ theme, initial
 
         {/* PROJECT LISTING */}
         <div className="space-y-8">
-          {/* FEATURED PROJECT 01: Enterprise Telemetry & ETL Pipeline */}
+          {/* FEATURED PROJECT 01 */}
           {featured01 && (
             <article className={`bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded p-6 lg:p-8 transition-all ${hoverBorder} shadow-2xs`}>
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-neutral-200 dark:border-neutral-800 pb-4 mb-6">
                 <div className="flex items-center gap-3">
                   <span className={`font-mono text-xs font-bold ${textPrimary}`}>
-                    01 // DATA_ENGINEERING
+                    {featured01.number} // {featured01.categoryTag}
                   </span>
                   <span className="h-3 w-[1px] bg-neutral-300 dark:bg-neutral-700"></span>
                   <span className={`font-mono text-[11px] px-2 py-0.5 rounded uppercase font-semibold border ${
@@ -125,11 +124,11 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ theme, initial
                       ? 'bg-indigo-50 text-indigo-700 border-indigo-300'
                       : 'bg-sky-950/80 text-sky-300 border-sky-700'
                   }`}>
-                    Featured Pipeline
+                    Featured Project
                   </span>
                 </div>
                 <span className="font-mono text-xs text-neutral-500 dark:text-neutral-400">
-                  STATUS: DEPLOYED_CONTAINER
+                  {featured01.status}
                 </span>
               </div>
 
@@ -234,21 +233,21 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ theme, initial
             </article>
           )}
 
-          {/* FEATURED PROJECT 02: Production Operations & Inventory Analytics Engine */}
+          {/* FEATURED PROJECT 02 */}
           {featured02 && (
             <article className={`bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded p-6 lg:p-8 transition-all ${hoverBorder} shadow-2xs`}>
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-neutral-200 dark:border-neutral-800 pb-4 mb-6">
                 <div className="flex items-center gap-3">
                   <span className={`font-mono text-xs font-bold ${textPrimary}`}>
-                    02 // DATA_ANALYTICS
+                    {featured02.number} // {featured02.categoryTag}
                   </span>
                   <span className="h-3 w-[1px] bg-neutral-300 dark:bg-neutral-700"></span>
                   <span className="font-mono text-[11px] bg-neutral-200 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border border-neutral-300 dark:border-neutral-700 px-2 py-0.5 rounded uppercase font-semibold">
-                    Operational Intelligence
+                    Featured Project
                   </span>
                 </div>
                 <span className="font-mono text-xs text-neutral-500 dark:text-neutral-400">
-                  STATUS: PRODUCTION_DASHBOARD
+                  {featured02.status}
                 </span>
               </div>
 

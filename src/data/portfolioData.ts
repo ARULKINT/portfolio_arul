@@ -47,7 +47,7 @@ export const PROJECTS: Project[] = [
   // --- DATA ENGINEERING / ANALYTICS ---
   {
     id: 'commerce-pulse',
-    number: '02',
+    number: '01',
     categoryTag: 'DATA_ENGINEERING',
     filterCategory: 'engineering',
     badge: 'Architecture Dossier',
@@ -91,7 +91,7 @@ with DAG('commerce_pulse_etl', start_date=datetime(2026, 1, 1), schedule_interva
   },
   {
     id: 'weather-data-eng',
-    number: '01',
+    number: '02',
     categoryTag: 'DATA_ENGINEERING',
     filterCategory: 'engineering',
     badge: 'PySpark & OpenWeather API',
@@ -179,7 +179,7 @@ GROUP BY r.rate_code_name ORDER BY avg_fare DESC;`
   },
   {
     id: 'lead-analytics',
-    number: '05',
+    number: '04',
     categoryTag: 'DATA_ANALYTICS',
     filterCategory: 'analytics',
     badge: 'Power BI & Python ETL',
@@ -220,7 +220,7 @@ ORDER BY conv_rate_pct DESC;`
   // --- SOFTWARE DEVELOPMENT & APPLICATIONS (PRIORITY 1) ---
   {
     id: 'rowdesk-crm',
-    number: '04',
+    number: '05',
     categoryTag: 'FULL_STACK',
     filterCategory: 'fullstack',
     badge: 'Deployed Production App',
@@ -277,7 +277,7 @@ export async function POST(req: Request) {
   },
   {
     id: 'forge-and-flint',
-    number: '07',
+    number: '06',
     categoryTag: 'SOFTWARE_APPS',
     filterCategory: 'applications',
     badge: 'Founder Initiative',
@@ -304,7 +304,7 @@ export async function POST(req: Request) {
   },
   {
     id: 'textile-crm',
-    number: '08',
+    number: '07',
     categoryTag: 'FULL_STACK',
     filterCategory: 'fullstack',
     badge: 'NextAuth Security',
@@ -330,7 +330,7 @@ export async function POST(req: Request) {
   },
   {
     id: 'pandian-hotel',
-    number: '09',
+    number: '08',
     categoryTag: 'SOFTWARE_APPS',
     filterCategory: 'applications',
     badge: 'Netlify Live',
@@ -357,7 +357,7 @@ export async function POST(req: Request) {
   },
   {
     id: 'portfolio-sdlc',
-    number: '11',
+    number: '09',
     categoryTag: 'FULL_STACK',
     filterCategory: 'fullstack',
     badge: '19 SDLC Docs Built',
@@ -407,7 +407,7 @@ jobs:
   // --- SECONDARY / LAST PRIORITY SOFTWARE APPS ---
   {
     id: 'hello-mobiles-crm',
-    number: '06',
+    number: '10',
     categoryTag: 'FULL_STACK',
     filterCategory: 'fullstack',
     badge: 'FastAPI Backend',
@@ -432,7 +432,7 @@ jobs:
   },
   {
     id: 'business-platform',
-    number: '10',
+    number: '11',
     categoryTag: 'FULL_STACK',
     filterCategory: 'fullstack',
     badge: 'PWA & Redis',
