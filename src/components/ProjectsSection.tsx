@@ -183,13 +183,25 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ theme, initial
                         <span>GitHub Repo</span>
                       </a>
                       <span className="text-neutral-400">/</span>
-                      <button
-                        onClick={() => setSelectedProject(featured01)}
-                        className={`inline-flex items-center gap-1.5 hover:underline cursor-pointer ${textPrimary}`}
-                      >
-                        <span className="material-symbols-outlined text-[16px]">open_in_new</span>
-                        <span>Live Demo</span>
-                      </button>
+                      {featured01.demoUrl && featured01.demoUrl.startsWith('http') ? (
+                        <a
+                          href={featured01.demoUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className={`inline-flex items-center gap-1.5 hover:underline cursor-pointer ${textPrimary}`}
+                        >
+                          <span className="material-symbols-outlined text-[16px]">open_in_new</span>
+                          <span>Live Demo ↗</span>
+                        </a>
+                      ) : (
+                        <button
+                          onClick={() => setSelectedProject(featured01)}
+                          className={`inline-flex items-center gap-1.5 hover:underline cursor-pointer ${textPrimary}`}
+                        >
+                          <span className="material-symbols-outlined text-[16px]">settings_suggest</span>
+                          <span>Interactive Sandbox</span>
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -375,14 +387,34 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ theme, initial
                   </div>
 
                   <div className="flex items-center justify-between pt-3 border-t border-neutral-200 dark:border-neutral-800 font-mono text-xs">
-                    <span className="text-neutral-700 dark:text-neutral-300 group-hover:text-[#0040da] flex items-center gap-1 font-medium">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedProject(project);
+                      }}
+                      className="text-neutral-700 dark:text-neutral-300 hover:text-[#0040da] flex items-center gap-1 font-medium cursor-pointer"
+                    >
                       <span className="material-symbols-outlined text-[15px]">info</span>
-                      <span>Deep Dive Dossier</span>
-                    </span>
-                    <span className={`flex items-center gap-1 font-semibold ${textPrimary}`}>
-                      <span className="material-symbols-outlined text-[15px]">open_in_new</span>
-                      <span>Live Demo</span>
-                    </span>
+                      <span>Deep Dive</span>
+                    </button>
+
+                    {project.demoUrl && project.demoUrl.startsWith('http') ? (
+                      <a
+                        href={project.demoUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className={`flex items-center gap-1 font-semibold hover:underline cursor-pointer ${textPrimary}`}
+                      >
+                        <span className="material-symbols-outlined text-[15px]">open_in_new</span>
+                        <span>Live App ↗</span>
+                      </a>
+                    ) : (
+                      <span className={`flex items-center gap-1 font-semibold ${textPrimary}`}>
+                        <span className="material-symbols-outlined text-[15px]">settings_suggest</span>
+                        <span>Sandbox</span>
+                      </span>
+                    )}
                   </div>
                 </div>
               </article>

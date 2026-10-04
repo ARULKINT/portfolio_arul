@@ -30,13 +30,15 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, theme, onCl
               {project.status}
             </span>
           </div>
-          <button
-            onClick={onClose}
-            className="p-1 rounded text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-200 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
-            aria-label="Close dialog"
-          >
-            <span className="material-symbols-outlined text-[22px]">close</span>
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={onClose}
+              className="p-1 rounded text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-200 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
+              aria-label="Close dialog"
+            >
+              <span className="material-symbols-outlined text-[22px]">close</span>
+            </button>
+          </div>
         </div>
 
         {/* Modal Scrollable Body */}
@@ -283,7 +285,7 @@ def execute_pipeline():
 
         {/* Modal Footer Controls */}
         <div className="px-6 py-4 border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/90 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-4 font-mono text-xs">
+          <div className="flex flex-wrap items-center gap-4 font-mono text-xs">
             <a
               href={project.githubUrl}
               target="_blank"
@@ -293,6 +295,21 @@ def execute_pipeline():
               <span className="material-symbols-outlined text-[16px]">code</span>
               <span>Inspect GitHub Repository</span>
             </a>
+
+            {project.demoUrl && project.demoUrl.startsWith('http') && (
+              <>
+                <span className="text-neutral-400">|</span>
+                <a
+                  href={project.demoUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded font-bold transition-colors shadow-xs"
+                >
+                  <span className="material-symbols-outlined text-[16px]">open_in_new</span>
+                  <span>Launch Live App ↗</span>
+                </a>
+              </>
+            )}
           </div>
 
           <button
