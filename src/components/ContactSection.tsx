@@ -43,7 +43,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ theme }) => {
 
   const handleCopyEmail = (e: React.MouseEvent) => {
     e.preventDefault();
-    navigator.clipboard.writeText('arul.engineer.dev@placeholder.com');
+    navigator.clipboard.writeText('aruldme004@gmail.com');
     setCopiedEmail(true);
     setTimeout(() => setCopiedEmail(false), 2500);
   };
@@ -118,7 +118,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ theme }) => {
                 >
                   <div className="min-w-0">
                     <div className="font-mono text-[10px] text-white/50 uppercase">Email Contact</div>
-                    <div className="font-mono text-xs text-white truncate">arul.engineer.dev@placeholder.com</div>
+                    <div className="font-mono text-xs text-white truncate">aruldme004@gmail.com</div>
                     {copiedEmail && (
                       <span className="text-[10px] text-emerald-400 font-mono block mt-0.5">✓ Copied to clipboard!</span>
                     )}
@@ -130,14 +130,14 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ theme }) => {
 
                 {/* LinkedIn */}
                 <a
-                  href="https://linkedin.com"
+                  href="https://www.linkedin.com/in/arul-eng/"
                   target="_blank"
                   rel="noreferrer"
                   className="p-3 bg-white/5 hover:bg-white/10 border border-neutral-700/80 rounded transition-colors group flex items-center justify-between"
                 >
                   <div className="min-w-0">
                     <div className="font-mono text-[10px] text-white/50 uppercase">LinkedIn Profile</div>
-                    <div className="font-mono text-xs text-white truncate">linkedin.com/in/arul-engineer</div>
+                    <div className="font-mono text-xs text-white truncate">linkedin.com/in/arul-eng</div>
                   </div>
                   <span className="material-symbols-outlined text-[18px] text-white/50 group-hover:text-white transition-colors">
                     arrow_outward
@@ -146,14 +146,14 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ theme }) => {
 
                 {/* GitHub */}
                 <a
-                  href="https://github.com"
+                  href="https://github.com/ARULKINT"
                   target="_blank"
                   rel="noreferrer"
                   className="p-3 bg-white/5 hover:bg-white/10 border border-neutral-700/80 rounded transition-colors group flex items-center justify-between"
                 >
                   <div className="min-w-0">
                     <div className="font-mono text-[10px] text-white/50 uppercase">GitHub Code</div>
-                    <div className="font-mono text-xs text-white truncate">github.com/arul-dev</div>
+                    <div className="font-mono text-xs text-white truncate">github.com/ARULKINT</div>
                   </div>
                   <span className="material-symbols-outlined text-[18px] text-white/50 group-hover:text-white transition-colors">
                     arrow_outward

@@ -18,39 +18,41 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ theme, onClose }) => {
   };
 
   const handleCopyText = () => {
-    const resumeText = `ARUL S. - DATA ENGINEER & FULL-STACK DEVELOPER
-Location: Tamil Nadu, India | Email: arul.engineer.dev@placeholder.com
-LinkedIn: linkedin.com/in/arul-engineer | GitHub: github.com/arul-dev
+    const resumeText = `ARUL G. - DATA ENGINEER · DATA ANALYST · FULL-STACK DEVELOPER
+Location: India | Email: aruldme004@gmail.com
+LinkedIn: linkedin.com/in/arul-eng | GitHub: github.com/ARULKINT
 
 SUMMARY:
-Early-career Data Engineer and Full-Stack Developer with hands-on industrial operations roots. Proven track record designing high-throughput ETL pipelines, relational data warehouses (star schema), real-time operational analytics, and resilient web applications.
+Computer Science Engineering graduate focused on data engineering, analytics, and full-stack software development. Built data workflows, analytics solutions, and business applications, emphasizing practical implementation, data quality, and maintainable systems. Uses AI-assisted tools (Claude Code, Gemini API) to accelerate development while reviewing and validating results.
 
 EDUCATION:
-- B.Tech in Computer Science and Engineering (2023 - 2026, Pondicherry University)
-- Diploma in Mechanical Engineering (2018 - 2021, Annai Velankanni Polytechnic)
-
-TECHNICAL SKILLS:
-- Languages: Python, SQL (PostgreSQL, MySQL, ANSI), JavaScript (ES6+), C++
-- Data Engineering: Apache Spark, PySpark, Airflow, Hadoop, Hive, Kafka, ETL/ELT
-- Data Analytics: Pandas, NumPy, Power BI, Excel Modeling, Time-Series Forecasting
-- Full-Stack & Platforms: Node.js, Express, React, Next.js, Docker, Linux, Git
+- B.Tech in Computer Science Engineering (Lateral Entry) | Rajiv Gandhi College of Engineering & Technology, Pondicherry University (2023–2026) — Result: 7.8/10 GPA
+- Diploma in Mechanical Engineering | Annai Velankanni Polytechnic College, Panruti (2018–2021) — Result: 78%
 
 PROFESSIONAL EXPERIENCE:
-Junior Engineer Trainee | Asara Pvt Ltd (Bangalore, India | Jan 2022 - May 2023)
-- Supported operational inventory management and daily departmental reporting across shifts.
-- Maintained physical-to-digital inventory variance audits before ERP batch closing.
-- Monitored live shop floor activities, preventing unplanned line stoppages.
+Junior Engineer Trainee | Asara Pvt Ltd (Bangalore, India | Jan 2022 – May 2023)
+- Worked in an industrial operations environment, supporting physical inventory management and daily operational reporting.
+- Coordinated seamlessly with production, dispatch, and quality teams across rotating work shifts.
+
+TECHNICAL SKILLS:
+- Strong: Python, SQL, PostgreSQL
+- Working / Learning: PySpark, Apache Spark, Apache Airflow, FastAPI
+- Learning: dbt, Apache Kafka
+- Additional Tools: C++, MySQL, MongoDB, Linux, Pandas, Hadoop, Hive, JavaScript, TypeScript, Node.js, React, Next.js, Prisma, Docker, Git, GitHub, Power BI, DAX, HTML, CSS, Figma
 
 FEATURED PROJECTS:
-1. Enterprise Telemetry & ETL Pipeline: Automated PySpark Kafka ingestion, date/node partitioning, 78% faster analytical queries.
-2. Production Operations Analytics Engine: SQL staging warehouse & Power BI dashboard driving 14.2% scrap reduction.
-3. Distributed Data Warehouse Schema: Airflow DAGs orchestrating SCD Type 2 dimension updates and fact transactions.
-4. Cross-Platform Operations Management Portal: Full-stack Next.js/PostgreSQL application with role-based audit signoffs.
+1. Weather Data Engineering Pipeline: API-based PySpark ingestion collecting weather observations across 7 Indian cities into PostgreSQL via JDBC in Docker. (github.com/ARULKINT/weather_data_eng)
+2. CommercePulse — E-commerce Data Architecture: End-to-end e-commerce pipeline processing order ingestion, data quality checks, and star schema transformations with Airflow.
+3. Rowdesk CRM: Deployed workflow platform with Next.js, Prisma, Neon PostgreSQL, Zod validation, and Google Drive OAuth. (crm-fx2.vercel.app | github.com/ARULKINT/rowdesk)
+4. Lead Acquisition Funnel Analytics: Analytics examining 360 Google Maps scraped leads and 2,192 call records using Power BI & DAX.
+5. Hello Mobiles CRM: FastAPI & PostgreSQL CRM MVP for mobile repair workflows, billing, and customer records. (hello-mobiles-crm.vercel.app | github.com/ARULKINT/hello-mobiles-crm)
+6. Forge & Flint: Founder. Web solutions initiative for business billing, inventory, and digital tools. (forgeandflint.in)
 
-LEADERSHIP & ATHLETICS:
-- College Student President (Represented student council & led campus initiatives)
-- Class Representative (Primary academic faculty liaison)
-- Competitive Kabaddi Athlete (Regional tournaments, tactical coordination under pressure)`;
+LEADERSHIP & ACTIVITIES:
+- College Student President (Led student body council & major campus initiatives)
+- Class Representative (Primary academic liaison for cohort)
+- Design Team Leadership (Visual branding & college event coordination)
+- Competitive Kabaddi Player (Regional tournaments, high-pressure execution)`;
 
     navigator.clipboard.writeText(resumeText);
     setCopied(true);
@@ -65,7 +67,7 @@ LEADERSHIP & ATHLETICS:
           <div className="flex items-center gap-2">
             <span className={`material-symbols-outlined text-[20px] ${textPrimary}`}>description</span>
             <span className="font-mono text-xs font-bold uppercase text-neutral-800 dark:text-neutral-200">
-              Curriculum Vitae // Arul S. (2026 Production Edition)
+              Curriculum Vitae // Arul G. (2026 Profile Edition)
             </span>
           </div>
           <div className="flex items-center gap-2">
@@ -85,7 +87,7 @@ LEADERSHIP & ATHLETICS:
             </button>
             <button
               onClick={onClose}
-              className="p-1 rounded text-neutral-400 hover:text-neutral-900 dark:hover:text-white"
+              className="p-1 rounded text-neutral-400 hover:text-neutral-900 dark:hover:text-white cursor-pointer"
             >
               <span className="material-symbols-outlined text-[22px]">close</span>
             </button>
@@ -98,15 +100,15 @@ LEADERSHIP & ATHLETICS:
           <div className="border-b pb-4 border-neutral-300 dark:border-neutral-800">
             <div className="flex justify-between items-start">
               <div>
-                <h1 className="text-2xl font-bold tracking-tight">ARUL S.</h1>
+                <h1 className="text-2xl font-bold tracking-tight">ARUL G.</h1>
                 <p className={`font-mono text-xs font-bold tracking-wider mt-0.5 ${textPrimary}`}>
-                  DATA ENGINEER &amp; FULL-STACK DEVELOPER
+                  DATA ENGINEER · DATA ANALYST · FULL-STACK DEVELOPER
                 </p>
               </div>
               <div className="text-right text-xs font-mono text-neutral-600 dark:text-neutral-400 space-y-0.5">
-                <p>Tamil Nadu, India</p>
-                <p>arul.engineer.dev@placeholder.com</p>
-                <p>github.com/arul-dev · linkedin.com/in/arul-engineer</p>
+                <p>India</p>
+                <p>aruldme004@gmail.com</p>
+                <p>github.com/ARULKINT · linkedin.com/in/arul-eng</p>
               </div>
             </div>
           </div>
@@ -114,30 +116,30 @@ LEADERSHIP & ATHLETICS:
           {/* Professional Summary */}
           <div>
             <h2 className="font-mono text-xs font-bold uppercase tracking-wider text-neutral-500 mb-1 border-b border-neutral-200 dark:border-neutral-800 pb-1">
-              Professional Summary
+              About &amp; Summary
             </h2>
             <p className="text-xs sm:text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed pt-1">
-              Early-career Data Engineer and Full-Stack Developer with hands-on industrial operations roots. Experienced in designing resilient ETL streaming pipelines with PySpark and Kafka, architecting multi-tier relational data warehouses, engineering operational web applications in React and Node.js, and executing physical-to-digital inventory variance audits.
+              Computer Science Engineering graduate focused on data engineering, analytics, and full-stack software development. Experienced in building data workflows, analytics solutions, and business applications, emphasizing practical implementation, data quality, and maintainable systems. Leverages AI-assisted tools (Claude Code, Gemini API) to accelerate execution while conducting direct code review and validation.
             </p>
           </div>
 
           {/* Technical Capabilities */}
           <div>
             <h2 className="font-mono text-xs font-bold uppercase tracking-wider text-neutral-500 mb-2 border-b border-neutral-200 dark:border-neutral-800 pb-1">
-              Technical Capabilities
+              Technical Skills &amp; Stack
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
               <div>
-                <strong className="font-semibold text-neutral-900 dark:text-white">Programming:</strong> Python, SQL (PostgreSQL, ANSI), JavaScript (ES6+), C++
+                <strong className="font-semibold text-neutral-900 dark:text-white">Strong:</strong> Python, SQL, PostgreSQL
               </div>
               <div>
-                <strong className="font-semibold text-neutral-900 dark:text-white">Data Engineering:</strong> Apache Spark, PySpark, Airflow, Hadoop, Hive, ETL/ELT
+                <strong className="font-semibold text-neutral-900 dark:text-white">Working / Learning:</strong> PySpark, Apache Spark, Apache Airflow, FastAPI
               </div>
               <div>
-                <strong className="font-semibold text-neutral-900 dark:text-white">Analytics &amp; BI:</strong> Pandas, NumPy, Power BI, Advanced Excel Modeling
+                <strong className="font-semibold text-neutral-900 dark:text-white">Learning:</strong> dbt, Apache Kafka, Cloud Data Platforms
               </div>
               <div>
-                <strong className="font-semibold text-neutral-900 dark:text-white">Full-Stack &amp; DevOps:</strong> Node.js, React, Next.js, Docker, Linux, REST APIs
+                <strong className="font-semibold text-neutral-900 dark:text-white">Full-Stack &amp; Tools:</strong> JavaScript, TypeScript, React, Next.js, Node.js, Express, Docker, Git, Power BI, DAX
               </div>
             </div>
           </div>
@@ -145,7 +147,7 @@ LEADERSHIP & ATHLETICS:
           {/* Professional Experience */}
           <div>
             <h2 className="font-mono text-xs font-bold uppercase tracking-wider text-neutral-500 mb-2 border-b border-neutral-200 dark:border-neutral-800 pb-1">
-              Professional Experience
+              Industry Experience
             </h2>
             <div className="space-y-3">
               <div>
@@ -157,47 +159,47 @@ LEADERSHIP & ATHLETICS:
                   Asara Pvt Ltd • Bangalore, India
                 </p>
                 <ul className="list-disc list-inside text-xs text-neutral-700 dark:text-neutral-300 space-y-1">
-                  <li>Supported physical-to-digital inventory variance audits across manufacturing shifts before ERP batch closing.</li>
-                  <li>Coordinated live reporting between production lines, quality assurance, and outbound dispatch logistics.</li>
-                  <li>Maintained shift dispatch checklists, ensuring proactive tool and buffer stock availability.</li>
+                  <li>Worked in an industrial operations environment supporting physical inventory management and daily operational reporting.</li>
+                  <li>Coordinated seamlessly between production personnel, logistics dispatch, and quality assurance teams across rotating work shifts.</li>
+                  <li>Monitored daily operations activities to prevent unplanned line delays and track stock counts.</li>
                 </ul>
               </div>
             </div>
           </div>
 
-          {/* Key Engineering Projects */}
+          {/* Featured Engineering Work */}
           <div>
             <h2 className="font-mono text-xs font-bold uppercase tracking-wider text-neutral-500 mb-2 border-b border-neutral-200 dark:border-neutral-800 pb-1">
-              Featured Engineering Work
+              Featured Projects
             </h2>
             <div className="space-y-3 text-xs">
               <div>
                 <div className="flex justify-between font-bold">
-                  <span>Enterprise Telemetry &amp; ETL Pipeline (PySpark, Kafka, PostgreSQL, Docker)</span>
-                  <span className="font-mono text-[11px] text-emerald-600">78% Faster Query Scans</span>
+                  <span>Weather Data Engineering Pipeline (Python, PySpark, PostgreSQL, OpenWeather API, Docker)</span>
+                  <span className="font-mono text-[11px] text-emerald-600">7 Cities Streamed</span>
                 </div>
                 <p className="text-neutral-600 dark:text-neutral-400 mt-0.5">
-                  Engineered streaming log ingest pipeline parsing semi-structured IoT packets, validating constraints, and staging partitioned Parquet files.
+                  API-based pipeline collecting weather observations for Indian cities and persisting records into PostgreSQL via JDBC inside Docker.
                 </p>
               </div>
 
               <div>
                 <div className="flex justify-between font-bold">
-                  <span>Production Operations &amp; Inventory Analytics Engine (Python, SQL, Power BI)</span>
-                  <span className="font-mono text-[11px] text-emerald-600">14.2% Scrap Reduction</span>
+                  <span>Rowdesk — CRM Platform (Next.js, Prisma, Neon PostgreSQL, Zod, Vitest)</span>
+                  <span className="font-mono text-[11px] text-emerald-600">Live Deployed</span>
                 </div>
                 <p className="text-neutral-600 dark:text-neutral-400 mt-0.5">
-                  Designed relational staging schema and executive dashboards monitoring scrap variance and inventory shrinkage across 3 manufacturing shifts.
+                  Workflow application with structured follow-ups, Zod input validation, Google Drive OAuth integration, and deployed on Vercel.
                 </p>
               </div>
 
               <div>
                 <div className="flex justify-between font-bold">
-                  <span>Cross-Platform Operations Management Portal (Next.js, Node.js, PostgreSQL)</span>
-                  <span className="font-mono text-[11px] text-emerald-600">100% Paperless Audits</span>
+                  <span>CommercePulse — E-commerce Architecture (PySpark, PostgreSQL, Airflow, Power BI)</span>
+                  <span className="font-mono text-[11px] text-emerald-600">Star Schema ETL</span>
                 </div>
                 <p className="text-neutral-600 dark:text-neutral-400 mt-0.5">
-                  Full-stack portal handling shift dispatch authorizations, cryptographic role-based signoffs, and audit history.
+                  Documented end-to-end data engineering platform processing order ingestion, validation checks, and Airflow orchestration.
                 </p>
               </div>
             </div>
@@ -211,17 +213,23 @@ LEADERSHIP & ATHLETICS:
             <div className="space-y-2 text-xs">
               <div className="flex justify-between">
                 <div>
-                  <p className="font-bold">B.Tech in Computer Science and Engineering</p>
+                  <p className="font-bold">B.Tech in Computer Science and Engineering (Lateral Entry)</p>
                   <p className="text-neutral-600 dark:text-neutral-400">Rajiv Gandhi College of Engineering and Technology (Pondicherry University)</p>
                 </div>
-                <span className="font-mono text-xs text-neutral-500">2023 – 2026</span>
+                <div className="text-right font-mono text-xs text-neutral-500">
+                  <p>2023 – 2026</p>
+                  <p className="text-emerald-600 font-bold">7.8 / 10 GPA</p>
+                </div>
               </div>
               <div className="flex justify-between">
                 <div>
                   <p className="font-bold">Diploma in Mechanical Engineering</p>
-                  <p className="text-neutral-600 dark:text-neutral-400">Annai Velankanni Polytechnic College</p>
+                  <p className="text-neutral-600 dark:text-neutral-400">Annai Velankanni Polytechnic College, Panruti</p>
                 </div>
-                <span className="font-mono text-xs text-neutral-500">2018 – 2021</span>
+                <div className="text-right font-mono text-xs text-neutral-500">
+                  <p>2018 – 2021</p>
+                  <p className="text-emerald-600 font-bold">78%</p>
+                </div>
               </div>
             </div>
           </div>

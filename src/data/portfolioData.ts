@@ -2,434 +2,472 @@ import { Project, SkillCategory, ExperienceItem, AcademicItem, LeadershipItem, T
 
 export const TELEMETRY_NODES: TelemetryNode[] = [
   {
-    id: 'source_a',
-    label: 'SOURCE_A',
-    sublabel: 'Telemetry Logs',
+    id: 'weather_api',
+    label: 'WEATHER_INGESTION',
+    sublabel: 'OpenWeather API Stream',
     status: 'streaming',
-    throughput: '4,200 evt/sec',
-    latency: '18ms',
-    details: '12 distributed factory floor sensor nodes publishing raw semi-structured JSON payloads via TCP socket stream.',
+    throughput: '7 Cities / Batch',
+    latency: '45ms',
+    details: 'Python ingestion collecting real-time weather observations across 7 Indian cities into PostgreSQL via JDBC.',
     type: 'source'
   },
   {
-    id: 'source_b',
-    label: 'SOURCE_B',
-    sublabel: 'Ops DB / ERP',
-    status: 'synced',
-    throughput: '850 tx/min',
-    latency: '34ms',
-    details: 'Production transaction ledger and raw bill-of-materials tables streamed via Debezium CDC change streams.',
-    type: 'source'
-  },
-  {
-    id: 'engine_core',
-    label: 'ENGINE_CORE',
-    sublabel: 'Kafka + Spark',
+    id: 'commerce_pulse',
+    label: 'COMMERCE_PULSE',
+    sublabel: 'PySpark + Airflow',
     status: 'active',
-    throughput: '5,050 evt/sec',
-    latency: '82ms',
-    details: 'Structured streaming pipeline enforcing JSON schema validation, dropping corrupt frames, and windowing timestamps into 1-minute batches.',
+    throughput: '12,400 evt/sec',
+    latency: '68ms',
+    details: 'End-to-end e-commerce pipeline processing order ingestion, data quality validations, and dimensional schema transforms.',
     type: 'processing'
   },
   {
-    id: 'storage',
-    label: 'STORAGE',
-    sublabel: 'PostgreSQL / Star Schema',
-    status: 'active',
-    throughput: '99.98% writes/sec',
-    latency: '14ms',
-    details: 'Multi-tier storage warehouse with hourly partitioning in PostgreSQL and columnar parquet partitions in object storage.',
+    id: 'rowdesk_db',
+    label: 'ROWDESK_DB',
+    sublabel: 'Neon PostgreSQL (Prisma)',
+    status: 'synced',
+    throughput: '99.9% uptime',
+    latency: '18ms',
+    details: 'PostgreSQL database hosting Rowdesk CRM workflows, Zod schema validations, and Google Drive OAuth metadata.',
     type: 'storage'
   },
   {
-    id: 'analytics',
-    label: 'ANALYTICS',
-    sublabel: 'Power BI',
+    id: 'funnel_analytics',
+    label: 'FUNNEL_ANALYTICS',
+    sublabel: 'Power BI + DAX',
     status: 'active',
-    throughput: 'DirectQuery Active',
+    throughput: '360 Leads / 2.1k Calls',
     latency: '110ms',
-    details: 'Executive and plant manager dashboards calculating real-time inventory shrinkage index, machine downtime, and shift scrap rates.',
-    type: 'consumer'
-  },
-  {
-    id: 'serving',
-    label: 'SERVING',
-    sublabel: 'REST APIs',
-    status: 'active',
-    throughput: '340 req/min',
-    latency: '24ms p95',
-    details: 'Secured HTTP microservice cluster exposing parameterized endpoints for cross-platform ERP sync and dispatch authorization.',
+    details: 'Lead acquisition analytics dashboard modeling 360 Google Maps scraped leads and 2,192 call records.',
     type: 'consumer'
   }
 ];
 
 export const PROJECTS: Project[] = [
   {
-    id: '01',
+    id: 'weather-data-eng',
     number: '01',
     categoryTag: 'DATA_ENGINEERING',
     filterCategory: 'engineering',
-    badge: 'Featured Pipeline',
-    status: 'STATUS: DEPLOYED_CONTAINER',
-    title: 'Enterprise Telemetry & ETL Pipeline',
-    description: 'Automated ingestion and partitioning of high-volume industrial log streams. Designed to parse nested semi-structured log events from distributed factory nodes, enforce schema constraints, drop malformed packets, and stage clean partitions into analytical storage.',
-    problem: 'Unpartitioned log spikes causing query bottlenecks and silent data truncation.',
-    architecture: 'PySpark transformations with date/hour partitioning to PostgreSQL & Parquet.',
-    metric: '78% faster analytical scans',
-    tags: ['PySpark', 'Apache Spark', 'PostgreSQL', 'Docker'],
-    githubUrl: 'https://github.com/arul-dev/enterprise-telemetry-etl',
-    demoUrl: '#demo',
+    badge: 'PySpark & OpenWeather API',
+    status: 'STATUS: GITHUB_VERIFIED',
+    title: 'Weather Data Engineering Pipeline',
+    description: 'API-based data pipeline collecting weather observations for 7 Indian cities, transforming the data with PySpark, and persisting records into PostgreSQL via JDBC inside Docker containers.',
+    problem: 'Raw API weather data required structured ETL pipelines for historical analysis and SQL querying.',
+    architecture: 'Python API Ingestion -> PySpark Transformations -> JDBC PostgreSQL Storage -> Docker Containerization.',
+    metric: '7 Indian Cities Streamed',
+    tags: ['Python', 'PySpark', 'PostgreSQL', 'Docker', 'OpenWeather API', 'JDBC'],
+    githubUrl: 'https://github.com/ARULKINT/weather_data_eng',
     codeSnippet: {
-      filename: 'pipeline_job.py',
-      runtime: 'SPARK-SESSION [ACTIVE]',
-      code: `from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, from_json
+      filename: 'weather_spark_ingest.py',
+      runtime: 'PYSPARK [OPENWEATHER_INGEST]',
+      code: `import requests
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, current_timestamp
 
 spark = SparkSession.builder \\
-    .appName("TelemetryIngestPipeline") \\
+    .appName("WeatherPipeline") \\
+    .config("spark.jars", "/drivers/postgresql-42.6.0.jar") \\
     .getOrCreate()
 
-raw_df = spark.readStream \\
-    .format("kafka") \\
-    .option("subscribe", "sensors.telemetry.v1") \\
-    .load()
+def fetch_weather(city):
+    url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}"
+    return requests.get(url).json()
 
-clean_df = raw_df \\
-    .select(from_json(col("value").cast("string"), schema).alias("payload")) \\
-    .filter(col("payload.sensor_val").isNotNull())
-
-clean_df.writeStream \\
-    .partitionBy("batch_date", "node_id") \\
-    .format("parquet") \\
-    .start("/lake/partitioned_telemetry/")`
+# PySpark JDBC Write to PostgreSQL
+weather_df.write \\
+    .format("jdbc") \\
+    .option("url", "jdbc:postgresql://postgres_db:5432/weather_db") \\
+    .option("dbtable", "city_weather_logs") \\
+    .option("user", "postgres") \\
+    .option("password", "secret") \\
+    .mode("append") \\
+    .save()`
     },
     deepDive: {
-      overview: 'Industrial IoT nodes generate semi-structured JSON telemetry with variable frequency and occasional null-byte corruption. This pipeline establishes an ingestion buffer using Kafka, validates incoming frames against an explicit schema in PySpark, and writes out Snappy-compressed Parquet files partitioned by date and node.',
+      overview: 'Collects live weather parameters (temperature, humidity, pressure, wind velocity) for 7 Indian cities. Uses PySpark for schema validation, data cleaning, and writing structured tables into PostgreSQL.',
       keyDecisions: [
-        'Implemented strict dead-letter queue (DLQ) routing for corrupted packets instead of dropping them silently.',
-        'Employed adaptive query execution (AQE) to coalesce micro-partitions into uniform 128MB chunks.',
-        'Cut downstream analytical dashboard load time from 14.8 seconds to 3.2 seconds.'
+        'Containerized PostgreSQL and PySpark driver dependencies using Docker Compose.',
+        'Implemented JDBC socket configuration for reliable bulk insertion.',
+        'Structured schema for temporal reporting across Indian regional weather grids.'
       ],
       interactiveType: 'spark-stream'
     }
   },
   {
-    id: '02',
+    id: 'commerce-pulse',
     number: '02',
-    categoryTag: 'DATA_ANALYTICS',
-    filterCategory: 'analytics',
-    badge: 'Operational Intelligence',
-    status: 'STATUS: PRODUCTION_DASHBOARD',
-    title: 'Production Operations & Inventory Analytics Engine',
-    description: 'Real-time analytical dashboards tracking manufacturing throughput, scrap rates, inventory variance, and dispatch timelines. Consolidates disparate daily physical shop floor audits with digital ERP records to isolate bottlenecked shifts and reduce stockouts.',
-    problem: '48-hour lag in identifying inventory shrinkage and shift throughput variance.',
-    architecture: 'Aggregated SQL staging tables feeding dynamic Power BI executive metrics.',
-    metric: '14.2% scrap reduction',
-    tags: ['Python', 'SQL', 'PostgreSQL', 'Power BI'],
-    githubUrl: 'https://github.com/arul-dev/ops-inventory-analytics',
-    demoUrl: '#demo',
-    metricsPanel: {
-      title: 'OPS_EFFICIENCY_TELEMETRY',
-      statusLabel: 'LIVE_RUN',
-      submetricLabel: 'Inventory Discrepancy Index',
-      value: '0.42%',
-      subvalue: '(-2.8% audit delta)',
-      badge: 'BATCH: SHIFT_C',
-      sqlQuery: `SELECT shift_id, SUM(scrap_qty) / SUM(output_qty) * 100 AS scrap_rate
-FROM ops_daily_logs 
-GROUP BY shift_id ORDER BY scrap_rate DESC;`
-    },
-    deepDive: {
-      overview: 'Shop floor operations at manufacturing plants face severe data drift between manual shift logs and automated ERP bookings. This project built an end-to-end data pipeline that reconciles physical cycle counts with warehouse ledger entries on a per-shift cadence.',
-      keyDecisions: [
-        'Automated discrepancy anomaly thresholds alerting supervisors before daily close.',
-        'Pre-aggregated window functions in PostgreSQL materialized views, cutting dashboard refresh time to <1 second.',
-        'Contributed directly to a 14.2% drop in avoidable scrap across three rotating plant shifts.'
-      ],
-      interactiveType: 'sql-runner'
-    }
-  },
-  {
-    id: '03',
-    number: '03',
     categoryTag: 'DATA_ENGINEERING',
     filterCategory: 'engineering',
-    badge: 'AIRFLOW_JOB',
-    status: 'STATUS: SCHEDULED_DAG',
-    title: 'Distributed Data Warehouse Schema & Staging Workflow',
-    description: 'Multi-tier star schema with automated cleansing and data quality checks. Features automated DAG schedules isolating dimension table drift and staging atomic transactions.',
-    problem: 'Slow OLAP queries on normalized transactional databases causing production locks.',
-    architecture: 'Apache Airflow orchestrating fact and slowly changing dimension (SCD Type 2) tables in PostgreSQL.',
-    metric: '99.9% data freshness SLA',
-    tags: ['Python', 'SQL', 'PostgreSQL', 'Airflow'],
-    githubUrl: 'https://github.com/arul-dev/warehouse-staging-airflow',
+    badge: 'Architecture Dossier',
+    status: 'STATUS: PIPELINE_DESIGNED',
+    title: 'CommercePulse — E-commerce Data Architecture',
+    description: 'Documented end-to-end data engineering platform processing e-commerce transaction data through ingestion, transformation, data quality validation, star schema storage, and Airflow orchestration.',
+    problem: 'High-frequency e-commerce orders causing data quality drifts and unvalidated analytical metrics.',
+    architecture: 'Python & PySpark ETL -> PostgreSQL Data Warehouse -> Apache Airflow DAGs -> Metabase/Power BI.',
+    metric: 'Full Star Schema ETL',
+    tags: ['Python', 'PySpark', 'PostgreSQL', 'Airflow', 'Docker', 'GitHub Actions', 'Power BI'],
+    githubUrl: 'https://github.com/ARULKINT/portfolio_arul',
+    codeSnippet: {
+      filename: 'commerce_dag.py',
+      runtime: 'AIRFLOW-DAG [SCHEDULED]',
+      code: `from airflow import DAG
+from airflow.operators.python import PythonOperator
+from datetime import datetime, timedelta
+
+default_args = {
+    'owner': 'arul',
+    'retries': 2,
+    'retry_delay': timedelta(minutes=5)
+}
+
+with DAG('commerce_pulse_etl', start_date=datetime(2026, 1, 1), schedule_interval='@daily', default_args=default_args) as dag:
+    validate_orders = PythonOperator(task_id='validate_orders', python_callable=run_data_quality_checks)
+    transform_dim = PythonOperator(task_id='transform_star_schema', python_callable=pyspark_transform_job)
+    validate_orders >> transform_dim`
+    },
     deepDive: {
-      overview: 'Engineered a star schema data warehouse that decouples operational transactional tables from reporting queries. Uses Airflow DAGs with Great Expectations for data validation.',
+      overview: 'Complete dimensional data warehouse model (Fact Orders, Dim Customer, Dim Product, Dim Date) designed to handle e-commerce operations with automated data quality checks.',
       keyDecisions: [
-        'Implemented SCD Type 2 tracking for employee and product dimension tables.',
-        'Created isolated staging schemas with idempotent upsert workflows.',
-        'Added automated Slack webhook alerts for failed pipeline steps.'
+        'Designed idempotent Airflow DAG tasks to prevent duplicate transactions on pipeline retries.',
+        'Constructed star-schema data models optimizing OLAP reporting queries.',
+        'Integrated automated GitHub Actions CI/CD workflows for dbt and SQL validation.'
       ],
       interactiveType: 'airflow-dag'
     }
   },
   {
-    id: '04',
-    number: '04',
-    categoryTag: 'FULL_STACK',
-    filterCategory: 'fullstack',
-    badge: 'WEB_PORTAL',
-    status: 'STATUS: PRODUCTION_APP',
-    title: 'Cross-Platform Operations Management Portal',
-    description: 'Full-stack web application designed for inventory audit logs, department dispatch authorizations, role-based sign-offs, and dynamic shift tracking.',
-    problem: 'Manual paper checklists resulting in delayed dispatch verifications and lost audit trails.',
-    architecture: 'Next.js frontend with REST APIs, PostgreSQL persistence, and role-based access control.',
-    metric: '100% paperless audit compliance',
-    tags: ['Next.js', 'Node.js', 'PostgreSQL', 'Tailwind'],
-    githubUrl: 'https://github.com/arul-dev/ops-management-portal',
+    id: 'uber-data-eng',
+    number: '03',
+    categoryTag: 'DATA_ENGINEERING',
+    filterCategory: 'engineering',
+    badge: 'Dimensional Modeling',
+    status: 'STATUS: MODEL_DESIGNED',
+    title: 'Uber Data Engineering Pipeline',
+    description: 'Data pipeline and analytics architecture using Uber trip records. Features dimensional modeling (Mage/Airflow ETL, Fact & Dimension tables) for trip distance, fare breakdown, and pick-up analytics.',
+    problem: 'Unstructured trip logs lacking analytical granularity for driver yield and fare optimization.',
+    architecture: 'Python Pandas/PySpark -> Star Schema PostgreSQL -> Airflow & dbt -> Power BI Dashboards.',
+    metric: '100k+ Trip Records Modeled',
+    tags: ['Python', 'Pandas', 'PostgreSQL', 'Airflow', 'dbt', 'Power BI', 'Docker'],
+    githubUrl: 'https://github.com/ARULKINT/portfolio_arul',
+    metricsPanel: {
+      title: 'UBER_TRIP_ANALYTICS',
+      statusLabel: 'STAR_SCHEMA',
+      submetricLabel: 'Average Fare Rate / Mile',
+      value: '$3.42',
+      subvalue: '(+12% surge delta)',
+      badge: 'DIM_RATE_CODE',
+      sqlQuery: `SELECT r.rate_code_name, 
+       ROUND(AVG(f.fare_amount)::numeric, 2) AS avg_fare,
+       COUNT(f.trip_id) AS total_trips
+FROM fact_trips f
+JOIN dim_rate_code r ON f.rate_code_id = r.rate_code_id
+GROUP BY r.rate_code_name ORDER BY avg_fare DESC;`
+    },
     deepDive: {
-      overview: 'A digital portal used across tablets and desktop terminals on the factory floor. Features responsive audit forms, instant variance calculation, and digital cryptographic signoffs.',
+      overview: 'Deconstructed flat Uber trip datasets into normalized dimension tables (Vendor, Rate Code, Pickup Location, Dropoff Location, Payment Type) and a central Fact Trip table.',
       keyDecisions: [
-        'Optimized client bundle for low-bandwidth plant network conditions.',
-        'Implemented optimistic UI updates with offline IndexedDB fallbacks.',
-        'Built comprehensive audit log tracking all edits with timestamp and user ID.'
-      ],
-      interactiveType: 'api-request'
-    }
-  },
-  {
-    id: '05',
-    number: '05',
-    categoryTag: 'AUTOMATION',
-    filterCategory: 'automation',
-    badge: 'DAEMON',
-    status: 'STATUS: SYSTEMD_ACTIVE',
-    title: 'Automated Batch Processing & Anomaly Alert System',
-    description: 'Scheduled cron pipelines scanning transaction logs for standard deviation spikes in warehouse dispatch queues with immediate alert dispatch via webhooks.',
-    problem: 'Dispatch anomalies identified hours after shipments departed facilities.',
-    architecture: 'Lightweight Linux daemon utilizing Pandas for statistical outlier detection and webhook notifications.',
-    metric: '<2 min anomaly notification',
-    tags: ['Python', 'Pandas', 'Linux', 'Bash'],
-    githubUrl: 'https://github.com/arul-dev/batch-anomaly-alert-daemon',
-    deepDive: {
-      overview: 'Continuously monitors warehouse queue logs. If variance in item dispatch weight exceeds 2.5 standard deviations from the moving average, an alert is pushed to shift leads immediately.',
-      keyDecisions: [
-        'Z-score computation across sliding 30-minute rolling windows.',
-        'Daemonized using systemd with automatic restart on unexpected termination.',
-        'Zero external cloud dependencies; operates cleanly on edge Linux gateways.'
-      ],
-      interactiveType: 'spark-stream'
-    }
-  },
-  {
-    id: '06',
-    number: '06',
-    categoryTag: 'DATA_ANALYTICS',
-    filterCategory: 'analytics',
-    badge: 'FORECASTING',
-    status: 'STATUS: VALIDATED_MODEL',
-    title: 'Retail Sales & Predictive Demand Intelligence Platform',
-    description: 'Exploratory data analysis and time-series clustering for inventory level optimization, highlighting seasonal variance to prevent overstocking costs.',
-    problem: 'Overstocking seasonal stock items resulting in dead capital and warehouse congestion.',
-    architecture: 'Pandas exploratory analysis with ARIMA forecasting and interactive Power BI drill-down models.',
-    metric: '18% inventory holding cost reduction',
-    tags: ['Python', 'Pandas', 'Power BI', 'SQL'],
-    githubUrl: 'https://github.com/arul-dev/retail-demand-forecasting',
-    deepDive: {
-      overview: 'Analyzed 3 years of retail transactional data. Decomposed trend, seasonality, and residual noise to compute safe reorder points per SKU category.',
-      keyDecisions: [
-        'Grouped 450+ product lines into 6 demand volatility clusters.',
-        'Constructed dynamic safety-stock formulas taking supplier lead-time variance into account.',
-        'Synthesized findings into an executive Power BI dashboard with scenario toggles.'
+        'Organized dbt transformations for automated data cleansing and schema documentation.',
+        'Created optimized window functions in SQL for hourly surge demand analytics.',
+        'Constructed interactive Power BI visual dashboards for trip density mapping.'
       ],
       interactiveType: 'sql-runner'
     }
   },
   {
-    id: '07',
-    number: '07',
+    id: 'rowdesk-crm',
+    number: '04',
     categoryTag: 'FULL_STACK',
     filterCategory: 'fullstack',
-    badge: 'MICROSERVICE',
-    status: 'STATUS: DOCKER_CONTAINER',
-    title: 'RESTful Data API & Query Service',
-    description: 'Microservice backend architecture exposing secure, cached HTTP endpoints for operational analytics, featuring rate limiting, JWT validation, and SQL query parameterization.',
-    problem: 'Uncontrolled direct client database queries risking injection and server overload.',
-    architecture: 'Node.js Express microservice containerized with Docker, featuring Redis caching layer and parameterized queries.',
-    metric: '<15ms average cached response',
-    tags: ['Node.js', 'Express', 'PostgreSQL', 'Docker'],
-    githubUrl: 'https://github.com/arul-dev/restful-data-api-service',
+    badge: 'Deployed Production App',
+    status: 'STATUS: LIVE_VERIFIED',
+    title: 'Rowdesk — Internal Workflow & CRM Platform',
+    description: 'Deployed CRM application featuring structured follow-up workflows, Zod input validation, database-backed state with Neon PostgreSQL, Google Drive read-only OAuth, and Vitest test suites.',
+    problem: 'Fragmented lead management and lack of structured follow-up scheduling for sales pipelines.',
+    architecture: 'Next.js App Router -> Prisma ORM -> Neon PostgreSQL -> Google Drive OAuth -> Vercel.',
+    metric: 'Live Deployed CRM',
+    tags: ['Next.js', 'React', 'Prisma', 'Neon PostgreSQL', 'Zod', 'Google OAuth', 'Vitest'],
+    githubUrl: 'https://github.com/ARULKINT/rowdesk',
+    demoUrl: 'https://crm-fx2.vercel.app/',
+    codeSnippet: {
+      filename: 'lead_route.ts',
+      runtime: 'NEXT.JS API ROUTE',
+      code: `import { prisma } from '@/lib/prisma';
+import { z } from 'zod';
+
+const LeadSchema = z.object({
+  clientName: z.string().min(2),
+  contactEmail: z.string().email(),
+  followUpDate: z.string()
+});
+
+export async function POST(req: Request) {
+  const body = await req.json();
+  const data = LeadSchema.parse(body);
+  
+  const newLead = await prisma.lead.create({
+    data: {
+      name: data.clientName,
+      email: data.contactEmail,
+      scheduledAt: new Date(data.followUpDate)
+    }
+  });
+  return Response.json(newLead);
+}`
+    },
     deepDive: {
-      overview: 'Engineered a resilient API gateway handling data queries between analytics frontends and underlying operational relational stores.',
+      overview: 'Rowdesk provides a robust workflow platform with database persistence via Prisma & Neon PostgreSQL. Includes full validation pipelines using Zod and automated Vitest suites.',
       keyDecisions: [
-        'Applied Token Bucket rate-limiting algorithm to protect against query flooding.',
-        'Added structured JSON logging with correlation IDs for cross-service tracing.',
-        'Enforced 100% prepared SQL statements to eliminate injection vulnerabilities.'
+        'Integrated Google Drive OAuth for seamless document reference attachment.',
+        'Deployed serverless Postgres on Neon with instant connection pooling.',
+        'Verified end-to-end reliability using automated Vitest unit & API tests.'
       ],
       interactiveType: 'api-request'
     }
   },
   {
-    id: '08',
-    number: '08',
-    categoryTag: 'DATA_ENGINEERING',
-    filterCategory: 'engineering',
-    badge: 'DISTRIBUTED_MAPREDUCE',
-    status: 'STATUS: CLUSTER_VERIFIED',
-    title: 'Hadoop & MapReduce Distributed Log Aggregator',
-    description: 'Batch log parser clustering system crash frequencies across clustered nodes. Implemented MapReduce paradigms to parse multi-gigabyte log dumps and generate Hive summary tables.',
-    problem: 'Single-node log analyzers running out of memory on multi-gigabyte server failure dumps.',
-    architecture: 'Hadoop HDFS cluster running distributed MapReduce jobs with Hive SQL aggregations.',
-    metric: '10x faster crash pattern extraction',
-    tags: ['Hadoop', 'Hive', 'Python', 'Linux'],
-    githubUrl: 'https://github.com/arul-dev/hadoop-mapreduce-log-aggregator',
+    id: 'lead-analytics',
+    number: '05',
+    categoryTag: 'DATA_ANALYTICS',
+    filterCategory: 'analytics',
+    badge: 'Claude Code Automation',
+    status: 'STATUS: ANALYTICS_COMPLETE',
+    title: 'Lead Acquisition Funnel Analytics',
+    description: 'Analytics project examining 360 lead acquisition records and 2,192 call follow-up entries collected via a custom Google Maps scraper built with Claude Code.',
+    problem: 'Unstructured business listing scrapings requiring cleansing, normalization, and conversion analytics.',
+    architecture: 'Claude Code Scraper -> Python Data Cleansing -> DAX Expressions -> Power BI Funnel.',
+    metric: '2,192 Call Records Analyzed',
+    tags: ['Python', 'Power BI', 'DAX', 'Data Cleansing', 'Claude Code'],
+    githubUrl: 'https://github.com/ARULKINT/portfolio_arul',
+    metricsPanel: {
+      title: 'LEAD_FUNNEL_TELEMETRY',
+      statusLabel: 'PARSED_DATASET',
+      submetricLabel: 'Funnel Conversion Rate',
+      value: '14.8%',
+      subvalue: '(360 leads / 2.1k calls)',
+      badge: 'DAX_MEASURE',
+      sqlQuery: `SELECT call_outcome, 
+       COUNT(call_id) AS total_calls,
+       ROUND((COUNT(call_id)::numeric / 2192) * 100, 2) AS outcome_pct
+FROM lead_call_logs 
+GROUP BY call_outcome 
+ORDER BY total_calls DESC;`
+    },
     deepDive: {
-      overview: 'Simulated a distributed Hadoop cluster to process server access logs. The Mapper isolates error codes and node hostnames; the Reducer tallies failure frequencies across temporal buckets.',
+      overview: 'Analyzed sales outreach effectiveness by combining scraper data with call attempt records to calculate true lead velocity and drop-off points.',
       keyDecisions: [
-        'Optimized custom WritableComparable key-value serializers to reduce network shuffle overhead.',
-        'Partitioned Hive external tables by year, month, and severity grade.',
-        'Automated cron-based HDFS directory rotation and garbage cleanup.'
+        'Built Python cleaning scripts to deduplicate business listings and standardize telephone formats.',
+        'Wrote custom DAX measures for rolling 7-day lead conversion metrics.',
+        'Created executive funnel visualizations highlighting optimal call response times.'
       ],
-      interactiveType: 'spark-stream'
+      interactiveType: 'sql-runner'
     }
   },
   {
-    id: '09',
-    number: '09',
-    categoryTag: 'AUTOMATION',
-    filterCategory: 'automation',
-    badge: 'NOTIFICATION_BOT',
-    status: 'STATUS: PRODUCTION_ACTIVE',
-    title: 'Automated PDF Report Generator & Notification Bot',
-    description: 'Daily dispatch summary compiler pulling tabular metrics from production databases, rendering stylized PDF sheets, and transmitting digests to management channels.',
-    problem: 'Plant executives lacking unified daily summaries before morning production meetings.',
-    architecture: 'Python headless script compiling SQL queries into styled PDF reports and transmitting via webhooks & SMTP.',
-    metric: '100% automated 7:00 AM delivery',
-    tags: ['Python', 'Pandas', 'Docker', 'Webhooks'],
-    githubUrl: 'https://github.com/arul-dev/pdf-report-notification-bot',
+    id: 'hello-mobiles-crm',
+    number: '06',
+    categoryTag: 'FULL_STACK',
+    filterCategory: 'fullstack',
+    badge: 'FastAPI Backend',
+    status: 'STATUS: LIVE_VERIFIED',
+    title: 'Hello Mobiles CRM & Repair Shop System',
+    description: 'Shop operations MVP built with FastAPI and PostgreSQL handling customer records, mobile repair job tracking, billing, and customer loyalty workflows.',
+    problem: 'Mobile repair shops lacking structured job status updates and paperless customer invoicing.',
+    architecture: 'FastAPI (Python) -> PostgreSQL Database -> HTML5/CSS Frontend -> Vercel.',
+    metric: 'Deployed Repair MVP',
+    tags: ['FastAPI', 'Python', 'PostgreSQL', 'HTML', 'CSS', 'Vercel'],
+    githubUrl: 'https://github.com/ARULKINT/hello-mobiles-crm',
+    demoUrl: 'https://hello-mobiles-crm.vercel.app/',
     deepDive: {
-      overview: 'Runs automatically at 06:45 AM daily. Extracts the completed night shift metrics, calculates scrap delta against weekly targets, generates a clean multi-page PDF briefing, and dispatches it.',
+      overview: 'A lightweight, ultra-fast CRM designed for mobile service centers to track repair tickets from diagnostic intake to final customer dispatch.',
       keyDecisions: [
-        'Used HTML/CSS templating with headless rendering for crisp, publication-grade tabular styling.',
-        'Configured automated retry logic with exponential backoff for outbound webhook calls.',
-        'Packaged into a lean 120MB Alpine Docker image.'
+        'Selected FastAPI for fast async request handling and automatic OpenAPI documentation.',
+        'Structured relational tables for customer profiles, repair devices, and spare part usage.',
+        'Deployed to Vercel with clean environment variable isolation.'
       ],
       interactiveType: 'api-request'
     }
   },
   {
-    id: '10',
-    number: '10',
+    id: 'forge-and-flint',
+    number: '07',
     categoryTag: 'SOFTWARE_APPS',
     filterCategory: 'applications',
-    badge: 'GEODATA_DASHBOARD',
-    status: 'STATUS: LIVE_APPLICATION',
-    title: 'Interactive Fleet & Shipment Tracking Dashboard',
-    description: 'Client-facing operational dashboard with visual coordinate tracking, delivery milestone markers, status filter chips, and latency telemetry for active transport assets.',
-    problem: 'Customers calling dispatch teams repeatedly due to lack of visibility into delivery milestones.',
-    architecture: 'React frontend featuring coordinate geospatial plots, PostgreSQL geospatial points, and real-time status state.',
-    metric: '65% drop in customer support inquiries',
-    tags: ['React', 'JavaScript', 'PostgreSQL', 'CSS'],
-    githubUrl: 'https://github.com/arul-dev/fleet-shipment-tracking-dashboard',
+    badge: 'Founder Initiative',
+    status: 'STATUS: WEBSITE_LIVE',
+    title: 'Forge & Flint — Software Solutions Initiative',
+    description: 'Software solutions initiative focused on practical business software, including CRM, billing, inventory, and digital solutions for small and growing enterprises.',
+    problem: 'Small businesses struggling with fragmented digital tools and complex enterprise pricing.',
+    architecture: 'React Frontend -> Vite Build -> Express API -> PostgreSQL Database.',
+    metric: 'Live Digital Initiative',
+    tags: ['React', 'Vite', 'Express', 'PostgreSQL', 'Node.js'],
+    githubUrl: 'https://github.com/ARULKINT/portfolio_arul',
+    demoUrl: 'https://forgeandflint.in/',
     deepDive: {
-      overview: 'Interactive web dashboard providing real-time tracking of cargo transit between manufacturing units, regional depots, and destination fulfillment centers.',
+      overview: 'Founded Forge & Flint to architect modern, intuitive web applications for regional business workflows. Designed responsive user interfaces and scalable Express microservices.',
       keyDecisions: [
-        'Implemented lightweight SVG canvas map rendering to ensure 60fps responsiveness on low-spec tablets.',
-        'Designed color-coded milestone telemetry (Dispatched, In Transit, Customs, Delivered).',
-        'Built fast client-side fuzzy searching for consignment numbers and driver IDs.'
+        'Established modular component design systems in React for rapid client customization.',
+        'Built REST APIs in Express with clean route controllers and PostgreSQL database integration.',
+        'Deployed production web presence at forgeandflint.in.'
+      ],
+      interactiveType: 'api-request'
+    }
+  },
+  {
+    id: 'textile-crm',
+    number: '08',
+    categoryTag: 'FULL_STACK',
+    filterCategory: 'fullstack',
+    badge: 'NextAuth Security',
+    status: 'STATUS: GITHUB_VERIFIED',
+    title: 'Textile Retail CRM Prototype',
+    description: 'CRM prototype tailored for textile retail management featuring customer billing history, inventory cataloging, and NextAuth role-based authentication.',
+    problem: 'Textile retail stores requiring specialized inventory tracking for fabric variants and customer ledgers.',
+    architecture: 'Next.js App Router -> Prisma ORM -> SQLite Database -> NextAuth.js.',
+    metric: 'Role-Based Authentication',
+    tags: ['Next.js', 'Prisma', 'SQLite', 'NextAuth', 'TypeScript'],
+    githubUrl: 'https://github.com/ARULKINT/textile-crm',
+    deepDive: {
+      overview: 'Designed around retail textile business needs, providing secure multi-user role management (Manager, Billing Staff) via NextAuth.',
+      keyDecisions: [
+        'Implemented Prisma schema relations mapping fabric SKUs to sales receipts.',
+        'Utilized NextAuth for secure session cookie management.',
+        'Ensured lightweight deployment with SQLite file database support.'
+      ],
+      interactiveType: 'api-request'
+    }
+  },
+  {
+    id: 'pandian-hotel',
+    number: '09',
+    categoryTag: 'SOFTWARE_APPS',
+    filterCategory: 'applications',
+    badge: 'Netlify Live',
+    status: 'STATUS: LIVE_VERIFIED',
+    title: 'Pandian Hotel & Room Stay Booking App',
+    description: 'Hotel booking web application featuring interactive room selection, reservation forms, and backend integration with Neon PostgreSQL.',
+    problem: 'Manual hotel room booking resulting in double-booking conflicts and slow reservation confirmations.',
+    architecture: 'JavaScript Browser App -> Express Backend -> Neon PostgreSQL -> Netlify Host.',
+    metric: 'Deployed Hotel App',
+    tags: ['JavaScript', 'Express', 'Neon PostgreSQL', 'Netlify', 'HTML/CSS'],
+    githubUrl: 'https://github.com/ARULKINT/pandian-hotel-room-stay',
+    demoUrl: 'https://eloquent-blancmange-9d37ea.netlify.app/',
+    deepDive: {
+      overview: 'Provides an intuitive booking interface for room availability queries, guest details submission, and backend state persistence.',
+      keyDecisions: [
+        'Integrated Neon PostgreSQL for cloud-hosted relational room reservation storage.',
+        'Built responsive CSS booking widgets for mobile guest access.',
+        'Deployed frontend application cleanly to Netlify CDN.'
       ],
       interactiveType: 'gps-telemetry'
+    }
+  },
+  {
+    id: 'business-platform',
+    number: '10',
+    categoryTag: 'FULL_STACK',
+    filterCategory: 'fullstack',
+    badge: 'PWA & Redis',
+    status: 'STATUS: PRE_LAUNCH',
+    title: 'Multi-Tenant Business Management Platform',
+    description: 'Multi-tenant enterprise platform covering billing, inventory, staff access, and offline-capable point-of-sale (POS) operations with PWA support.',
+    problem: 'Multi-branch businesses losing POS capabilities during internet connectivity drops.',
+    architecture: 'Fastify Backend -> React PWA Frontend -> PostgreSQL -> Redis Caching.',
+    metric: 'Offline POS Capable',
+    tags: ['Fastify', 'React', 'PostgreSQL', 'Redis', 'PWA', 'TypeScript'],
+    githubUrl: 'https://github.com/ARULKINT/portfolio_arul',
+    deepDive: {
+      overview: 'Architected with tenant isolation in PostgreSQL and Service Worker offline caching for uninterrupted point-of-sale operations.',
+      keyDecisions: [
+        'Selected Fastify framework for high-throughput HTTP benchmark speeds.',
+        'Implemented Redis caching layer for quick multi-tenant inventory lookups.',
+        'Integrated Progressive Web App (PWA) manifest for offline tablet installation.'
+      ],
+      interactiveType: 'api-request'
     }
   }
 ];
 
 export const SKILL_CATEGORIES: SkillCategory[] = [
   {
-    title: 'Programming',
+    title: 'Programming & Data',
     icon: 'code_blocks',
-    skills: ['Python', 'SQL (PostgreSQL / ANSI)', 'C++']
+    skills: ['Python', 'SQL (PostgreSQL)', 'C++']
   },
   {
-    title: 'Data Engineering',
+    title: 'Data Engineering & Cloud',
     icon: 'hub',
-    skills: ['Apache Spark', 'PySpark', 'Hadoop', 'Hive', 'ETL Workflows']
+    skills: ['PySpark', 'Apache Spark', 'Apache Airflow', 'dbt', 'Kafka', 'Hadoop', 'Hive']
   },
   {
-    title: 'Data Analysis',
+    title: 'Data Analytics & BI',
     icon: 'analytics',
-    skills: ['Pandas & NumPy', 'Microsoft Excel', 'Power BI', 'Data Cleansing']
+    skills: ['Pandas & NumPy', 'Power BI', 'DAX', 'Microsoft Excel', 'Data Cleansing']
   },
   {
-    title: 'Databases',
+    title: 'Databases & Storage',
     icon: 'database',
-    skills: ['PostgreSQL', 'MySQL', 'MongoDB']
+    skills: ['PostgreSQL', 'MySQL', 'MongoDB', 'Neon Postgres', 'Prisma ORM']
   },
   {
-    title: 'Development & Web',
+    title: 'Full-Stack Development',
     icon: 'devices',
-    skills: ['HTML5 & CSS3', 'JavaScript (ES6+)', 'Node.js', 'React', 'Next.js']
+    skills: ['JavaScript / TypeScript', 'React', 'Next.js', 'FastAPI', 'Node.js / Express', 'Fastify']
   },
   {
-    title: 'Tools & Platforms',
+    title: 'Tools & DevOps',
     icon: 'terminal',
-    skills: ['Git', 'GitHub', 'Linux / Unix Shell', 'Docker']
+    skills: ['Docker', 'Git & GitHub', 'Linux Shell', 'GitHub Actions', 'Claude Code']
   }
 ];
 
-export const DESIGN_SKILLS = ['Figma', 'Photoshop', 'Illustrator', 'Premiere Pro', 'After Effects'];
+export const DESIGN_SKILLS = ['Figma', 'HTML/CSS', 'Power BI / Metabase', 'Git Flow', 'REST APIs'];
 
 export const SKILL_DETAILS: Record<string, SkillDetail> = {
   'PySpark': {
     name: 'PySpark / Apache Spark',
     category: 'Data Engineering',
-    proficiency: 'Production Ready',
-    projects: ['Enterprise Telemetry & ETL Pipeline'],
-    context: 'Writing structured streaming pipelines, handling partition keys (date/node_id), writing to Parquet columnar storage, and managing SparkSession configurations.',
-    sampleCode: 'df.writeStream.partitionBy("batch_date").format("parquet").start("/lake/data")'
+    proficiency: 'Advanced',
+    projects: ['Weather Data Engineering Pipeline', 'CommercePulse E-commerce Architecture'],
+    context: 'Writing PySpark structured streaming pipelines, JDBC database ingestion, partitioning datasets by date/city, and executing Spark transformations.',
+    sampleCode: 'spark.read.format("jdbc").option("url", "jdbc:postgresql://db:5432/weather").load()'
   },
   'Python': {
     name: 'Python',
     category: 'Programming',
     proficiency: 'Production Ready',
-    projects: ['Telemetry ETL', 'Ops Analytics', 'Anomaly Alert Daemon', 'PDF Bot'],
-    context: 'Core language for ETL pipelines, data analysis with Pandas/NumPy, data modeling, automated cron scripts, and system utilities.',
-    sampleCode: 'import pandas as pd\ndf = pd.read_csv("telemetry.csv")\nz_score = (df["val"] - df["val"].mean()) / df["val"].std()'
+    projects: ['Weather Pipeline', 'CommercePulse', 'Uber Pipeline', 'Lead Funnel Analytics', 'FastAPI CRM'],
+    context: 'Core programming language for ETL pipelines, API data extraction, data cleansing with Pandas, FastAPI backends, and automation scripts.',
+    sampleCode: 'import pandas as pd\ndf = pd.read_json("weather_api.json")\nclean_df = df.dropna(subset=["temperature"])'
   },
-  'SQL (PostgreSQL / ANSI)': {
-    name: 'SQL (PostgreSQL / ANSI)',
-    category: 'Programming & Databases',
+  'SQL (PostgreSQL)': {
+    name: 'SQL & PostgreSQL',
+    category: 'Databases & Querying',
     proficiency: 'Production Ready',
-    projects: ['Inventory Analytics', 'Data Warehouse Schema', 'REST API'],
-    context: 'Complex multi-table JOINs, window functions (ROW_NUMBER, LAG, LEAD), indexing strategies (B-Tree, BRIN for time series), and star schema design.',
-    sampleCode: 'SELECT shift_id, SUM(scrap_qty) / SUM(output_qty) * 100 AS scrap_rate\nFROM ops_daily_logs\nGROUP BY shift_id ORDER BY scrap_rate DESC;'
+    projects: ['Weather Pipeline', 'Uber Pipeline', 'Rowdesk CRM', 'Hello Mobiles CRM'],
+    context: 'Complex SQL queries, window functions (ROW_NUMBER, LAG), relational star schema modeling, indexing, and Prisma database migrations.',
+    sampleCode: 'SELECT rate_code, AVG(fare_amount) OVER(PARTITION BY rate_code) FROM fact_trips;'
   },
   'PostgreSQL': {
-    name: 'PostgreSQL',
+    name: 'PostgreSQL & Neon DB',
     category: 'Databases',
     proficiency: 'Production Ready',
-    projects: ['Data Warehouse', 'Ops Portal', 'RESTful API', 'Fleet Dashboard'],
-    context: 'Relational data modeling, ACID transactions, materialized views, foreign key constraints, connection pooling with PgBouncer, and performance tuning.'
-  },
-  'Docker': {
-    name: 'Docker',
-    category: 'Tools & Platforms',
-    proficiency: 'Production Ready',
-    projects: ['Telemetry ETL', 'RESTful API', 'PDF Report Generator'],
-    context: 'Multi-stage Dockerfiles, Docker Compose service orchestration (PostgreSQL + API + Redis), environment variable management, and lightweight Alpine base images.'
+    projects: ['Weather Pipeline', 'Rowdesk CRM', 'Pandian Hotel', 'Hello Mobiles'],
+    context: 'Relational database administration, schema design, Prisma integration, connection pooling with Neon serverless Postgres, and SQL tuning.'
   },
   'React': {
-    name: 'React',
-    category: 'Development & Web',
+    name: 'React & Next.js',
+    category: 'Full-Stack Development',
     proficiency: 'Production Ready',
-    projects: ['Operations Management Portal', 'Fleet Tracking Dashboard'],
-    context: 'Modern React with functional components, hooks, custom state management, responsive Tailwind layouts, and interactive SVG/Canvas renderings.'
+    projects: ['Rowdesk CRM', 'Forge & Flint', 'Textile CRM', 'Portfolio Application'],
+    context: 'Building full-stack web applications with Next.js App Router, React 19, TypeScript, state management, and responsive Tailwind layouts.'
   },
   'Power BI': {
-    name: 'Power BI',
-    category: 'Data Analysis',
+    name: 'Power BI & DAX',
+    category: 'Data Analytics',
     proficiency: 'Advanced',
-    projects: ['Production Operations Analytics', 'Retail Demand Forecasting'],
-    context: 'DAX expressions, data modeling with star schemas, custom drill-downs, parameterized slicers, and executive shop floor operational dashboards.'
+    projects: ['Lead Acquisition Funnel Analytics', 'CommercePulse', 'Uber Pipeline'],
+    context: 'Constructing interactive executive dashboards, writing custom DAX measures, modeling star schemas, and visualizing sales funnel metrics.'
   }
 };
 
@@ -439,45 +477,45 @@ export const EXPERIENCE: ExperienceItem = {
   company: 'Asara Pvt Ltd',
   location: 'Bangalore, India',
   period: 'January 2022 – May 2023',
-  summary: 'Hands-on shop-floor operations role managing physical inventory tracking, manufacturing shift reporting, and ERP variance reconciliation.',
+  summary: 'Worked in an industrial operations environment, supporting physical inventory management, manufacturing shift reporting, and cross-functional coordination with production, dispatch, and quality teams.',
   bullets: [
     'Supported operational inventory management and daily departmental reporting across manufacturing shifts.',
-    'Maintained daily inventory records, audited physical-to-digital inventory variance, and highlighted discrepancies before ERP batch closing.',
-    'Coordinated seamlessly between production personnel, logistics dispatch, and quality assurance teams across alternating work shifts.',
-    'Helped monitor live operational activities and prevent unplanned production interruptions through proactive stock and tool tracking.'
+    'Maintained daily inventory records, audited physical-to-digital inventory variance, and highlighted discrepancies before batch closing.',
+    'Coordinated directly between production leads, logistics dispatch, and quality assurance teams.',
+    'Monitored live operational activities to prevent unplanned production interruptions through proactive tool and stock tracking.'
   ],
   competencies: [
     'Inventory Auditing',
-    'Operational Reporting',
-    'Shift Scheduling',
-    'Cross-Functional Sync',
-    'ERP Reconciliation'
+    'Operations Reporting',
+    'Production Coordination',
+    'Quality Assurance Sync',
+    'ERP Inventory Logs'
   ],
   shiftMetrics: [
-    { label: 'Audited Inventory Items', value: '1,400+ units / week' },
-    { label: 'Variance Detection Delta', value: '<0.5% target' },
-    { label: 'Manufacturing Shifts Synced', value: '3 rotating shifts' },
-    { label: 'ERP Batch Signoff Timeliness', value: '99.4% on schedule' }
+    { label: 'Industrial Experience', value: '17 Months' },
+    { label: 'Daily Operations Audit', value: 'Physical & Digital' },
+    { label: 'Department Coordination', value: 'Production, Quality, Dispatch' },
+    { label: 'Reporting Velocity', value: '100% Shift Compliance' }
   ]
 };
 
 export const ACADEMICS: AcademicItem[] = [
   {
-    degreeType: 'DEGREE // UNDERGRADUATE',
+    degreeType: 'DEGREE // B.TECH CSE',
     status: 'In Progress',
-    title: 'B.Tech in Computer Science and Engineering',
-    institution: 'Rajiv Gandhi College of Engineering and Technology (Pondicherry University)',
-    description: 'Rigorous immersion in distributed architectures, operating systems, data structures and algorithms, database management, and cloud application paradigms.',
-    coursework: ['Algorithms', 'DBMS', 'OS & Networking', 'Distributed Systems', 'Data Warehousing'],
+    title: 'B.Tech in Computer Science and Engineering (Lateral Entry)',
+    institution: 'Rajiv Gandhi College of Engineering and Technology, Pondicherry University',
+    description: 'Specialized in computer science engineering, data structures, algorithms, database management systems, operating systems, software engineering, and data pipeline architectures.',
+    coursework: ['Data Structures & Algorithms', 'Database Management Systems (DBMS)', 'Operating Systems', 'Computer Networks', 'Software Engineering'],
     period: '2023 – 2026'
   },
   {
-    degreeType: 'DIPLOMA // TECHNICAL',
+    degreeType: 'DIPLOMA // MECHANICAL',
     status: 'Completed',
     title: 'Diploma in Mechanical Engineering',
-    institution: 'Annai Velankanni Polytechnic College',
-    description: 'Strong cross-disciplinary foundation in manufacturing workflows, industrial drafting, material kinematics, precision measurement, and quality assurance principles.',
-    coursework: ['Manufacturing Process', 'Quality Control', 'CAD/Drafting', 'Fluid Mechanics', 'Industrial Management'],
+    institution: 'Annai Velankanni Polytechnic College, Panruti',
+    description: 'Foundation in industrial engineering, manufacturing processes, quality control, precision measurement, and operational workflows.',
+    coursework: ['Manufacturing Process', 'Quality Control', 'Industrial Management', 'CAD & Mechanical Drafting'],
     period: '2018 – 2021'
   }
 ];
@@ -486,37 +524,30 @@ export const LEADERSHIP: LeadershipItem[] = [
   {
     title: 'College Student President',
     icon: 'account_balance',
-    summary: 'Elected to lead the college student council. Coordinated large-scale multi-departmental campus initiatives, organized inter-college events, and served as the direct student liaison to the college administration.',
-    domain: '// Council Representation',
-    fullNarrative: 'Represented 1,800+ students across engineering branches. Chaired monthly advisory committees with department heads and Dean, resolving facility challenges and launching student peer mentorship programs.'
+    summary: 'Elected to lead the college student body. Coordinated campus initiatives, organized inter-college technical events, and served as the primary liaison to college leadership.',
+    domain: '// Campus Leadership',
+    fullNarrative: 'Represented student interests across engineering departments, chaired student advisory committees, and led major campus events.'
   },
   {
     title: 'Class Representative',
     icon: 'groups',
-    summary: 'Serving as the primary communication bridge between academic faculty and the student cohort. Managing scheduling, resolving academic logistical hurdles, and facilitating peer study circles.',
-    domain: '// Cohort Management',
-    fullNarrative: 'Maintained seamless communication channels across faculty members, lab coordinators, and 60+ classmates to ensure timetable adjustments and project submission clarity.'
+    summary: 'Serving as the primary communication bridge between academic faculty and the student cohort, resolving logistics, and facilitating study groups.',
+    domain: '// Cohort Coordination',
+    fullNarrative: 'Managed academic timetables, lab session coordination, and project submissions across 60+ classmates.'
   },
   {
-    title: 'Design Team Leadership',
+    title: 'Design Team Leadership & Event Coordination',
     icon: 'brush',
-    summary: 'Headed visual design and creative media teams for university symposia, producing banners, event badges, digital banners, and presentation suites with consistent visual identity.',
-    domain: '// Visual Directorship',
-    fullNarrative: 'Supervised a squad of 8 student designers using Figma, Illustrator, and Photoshop to brand inter-college technical fests with comprehensive typography and print collateral.'
+    summary: 'Headed visual design and creative teams for university symposiums, producing branding collateral, event banners, and digital assets.',
+    domain: '// Event Management',
+    fullNarrative: 'Supervised student design teams to create visual branding, banners, and digital media for university tech fests.'
   },
   {
-    title: 'Technical Event Organization',
-    icon: 'event',
-    summary: 'Managed end-to-end logistics for engineering symposiums, hackathons, and technical workshops—spearheading vendor coordination, budgeting, and participant communications.',
-    domain: '// Logistics & Coordination',
-    fullNarrative: 'Orchestrated logistics for a 400+ participant state-level hackathon. Managed room allocations, high-speed networking drops, sponsorship budgets, and judging rubrics.'
-  },
-  {
-    title: 'Kabaddi Competitive Athlete',
+    title: 'Competitive Kabaddi Player',
     icon: 'sports_martial_arts',
-    summary: 'Active participant in competitive regional Kabaddi tournaments. The sport demands instantaneous tactical reaction time, rigorous physical discipline, total mental clarity under severe physical stress, and absolute trust in teammate coordination.',
-    domain: '// Team Strategy & Resilience',
-    highlightTag: 'HIGH_PRESSURE EXECUTION',
-    fullNarrative: 'Competitive Kabaddi requires defensive synchronization, breath-holding raid intensity, and situational awareness under split-second tactical shifts. It instills deep resilience that translates directly into high-pressure technical problem solving.'
+    summary: 'Active athlete competing in regional Kabaddi tournaments. The sport demands quick tactical reaction time, physical discipline, and synchronized teamwork under intense pressure.',
+    domain: '// Teamwork & Tactical Resilience',
+    highlightTag: 'HIGH PRESSURE RESILIENCE',
+    fullNarrative: 'Kabaddi requires split-second tactical awareness and defensive coordination, building deep mental resilience and teamwork.'
   }
 ];

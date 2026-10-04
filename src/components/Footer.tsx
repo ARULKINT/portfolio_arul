@@ -19,21 +19,21 @@ export const Footer: React.FC<FooterProps> = ({ theme }) => {
         <div className="flex flex-col gap-1.5">
           <div className="flex items-center gap-2">
             <span className="font-mono text-xs uppercase font-bold text-neutral-900 dark:text-white">
-              Arul S.
+              Arul G.
             </span>
             <span className="text-neutral-400 font-mono text-xs">//</span>
             <span className={`font-mono text-xs font-semibold ${textPrimary}`}>
-              v4.1.0-prod [sys:ready]
+              v1.0.0-prod [sys:ready]
             </span>
           </div>
           <p className="text-xs text-neutral-600 dark:text-neutral-400">
-            © 2026 Arul. Architected for resilient scale, computational clarity, and engineering rigor.
+            © 2026 Arul G. Built for practical data engineering, analytics, and software implementation.
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-6 font-mono text-xs text-neutral-600 dark:text-neutral-400">
           <a
-            href="https://github.com/arul-dev"
+            href="https://github.com/ARULKINT"
             target="_blank"
             rel="noreferrer"
             className="hover:text-neutral-900 dark:hover:text-white transition-colors flex items-center gap-1.5"
@@ -42,7 +42,7 @@ export const Footer: React.FC<FooterProps> = ({ theme }) => {
             <span>GitHub</span>
           </a>
           <a
-            href="https://linkedin.com"
+            href="https://www.linkedin.com/in/arul-eng/"
             target="_blank"
             rel="noreferrer"
             className="hover:text-neutral-900 dark:hover:text-white transition-colors flex items-center gap-1.5"
